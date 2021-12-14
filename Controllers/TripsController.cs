@@ -20,12 +20,14 @@ namespace JaTour.Controllers
             _context = context;
         }
 
+        // Get All trip
         [HttpGet]
         public async Task<ActionResult<List<Trip>>> GetTrips()
         {
             return await _context.Trips.ToListAsync();
         }
 
+        // Get One Trip
         [HttpGet("{id}")]
         public async Task<ActionResult<Trip>> GetTrip(Guid id) {
             return await _context.Trips.FindAsync(id);

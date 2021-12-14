@@ -1,2 +1,5 @@
 /* Provide sufficient contrast against white background */
 
+body {
+    background-color: rgb(248 249 250);
+}
