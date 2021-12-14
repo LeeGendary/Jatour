@@ -81,9 +81,7 @@ export default function Header({handleThemeChange }: Props) {
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
-    const handleCloseNavMenu = () => {
-        
-    };
+    const handleCloseNavMenu = () => {};
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
