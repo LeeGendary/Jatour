@@ -1,16 +1,18 @@
-import React, { useState, useMemo} from 'react';
+import React, { useState} from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
-import { Home } from './components/Home';
+import  Home  from './components/Home';
 import { FetchData } from './components/FetchData';
 import { Counter } from './components/Counter';
 import Header from './components/Header';
+
 import './custom.css'
 
 export default function App() {
 
     const [mode, setMode] = useState('light');
+    
 
     const theme = createTheme({
                 palette: {

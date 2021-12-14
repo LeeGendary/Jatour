@@ -35,6 +35,7 @@ namespace JaTour
             {
                 opt.UseSqlite(_config.GetConnectionString("DefaultConnection"));
             });
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +64,8 @@ namespace JaTour
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
+
+            app.UseCors();
 
             app.UseSpa(spa =>
             {
