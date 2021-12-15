@@ -25,10 +25,8 @@ export default function App() {
     return (
 
             <ThemeProvider theme={theme}>
-                <Header handleThemeChange={handleThemeChange} />
-                <Layout>
-                    <Route exact path='/' component={Home} />
-                </Layout>
+               <Header handleThemeChange={handleThemeChange} />
+               <Route exact path='/' component={Home} />
             </ThemeProvider>
     );
   

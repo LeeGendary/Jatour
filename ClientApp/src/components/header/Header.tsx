@@ -19,7 +19,8 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { NavLink  } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { makeStyles } from '@mui/styles';
 
 
 
@@ -65,16 +66,23 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         },
     },
 }));
-
+//Style
+const useStyles = makeStyles({
+    header: {
+        backgroundColor: "#8567d6",
+        zIndex: 40,
+    },
+});
 
 interface Props {
     handleThemeChange: () => void;
 }
+// dropdown menu
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export default function Header({handleThemeChange }: Props) {
     const theme = useTheme();
-
+    const classes = useStyles();
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
 
@@ -88,13 +96,15 @@ export default function Header({handleThemeChange }: Props) {
     };
 
     return (
-        <AppBar position="static" sx={{ flexGrow: 1 }}>
+        <AppBar position="static" className={classes.header}>
             <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
+                   
+                   <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
                     <Typography
                         variant="h6"
                         noWrap
                         component={NavLink}
+                        
                         sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' }, color: "inherit", textDecoration: "none" }}
                         to='/'  
                     >
