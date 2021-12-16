@@ -17,10 +17,12 @@ import TripFormModal from "../../components/TripForm/TripForm";
 const useStyles = makeStyles({
   container: {
     alignItems: "center",
-    background: "white",
+    background:
+      "linear-gradient(-59deg, rgb(152, 175, 189), rgb(33, 183, 213)) !important",
     height: "100vh",
-    color: "#555",
-    border: "1px solid #ece7e7",
+    color: "white",
+    border: "1px solid rgb(33, 183, 213)",
+    borderTop: "none",
     boxShadow:
       "0 16px 24px 2px rgb(0 0 0 / 14%), 0 6px 30px 5px rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%)",
   },
@@ -42,18 +44,21 @@ export default function LeftBar() {
       <Typography variant="h6" gutterBottom>
         Members
       </Typography>
-      <AvatarGroup max={4}>
-        <Avatar>H</Avatar>
+      <AvatarGroup max={5}>
+        <Avatar alt="Remy Sharp" src="https://bit.ly/3GK7f8a" />
         <Avatar sx={{ bgcolor: deepOrange[500] }}>N</Avatar>
+        <Avatar alt="Alba Sharp" src="https://bit.ly/30tqgMt" />
+        <Avatar alt="Chris Sharp" src="https://bit.ly/3m3jg0A" />
         <Avatar sx={{ bgcolor: deepPurple[500] }}>OP</Avatar>
-        <Avatar>K</Avatar>
+        <Avatar alt="John Sharp" src="https://bit.ly/30tqgMt" />
+        <Avatar>H</Avatar>
         <Avatar></Avatar>
       </AvatarGroup>
       <List>
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <Home sx={{ mr: 1 }} />
+              <Home sx={{ mr: 1, color: "inherit" }} />
             </ListItemIcon>
             <ListItemText primary="Home" />
           </ListItemButton>
@@ -61,7 +66,7 @@ export default function LeftBar() {
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <ChatIcon sx={{ mr: 1 }} />
+              <ChatIcon sx={{ mr: 1, color: "inherit" }} />
             </ListItemIcon>
             <ListItemText primary="Chat" />
           </ListItemButton>

@@ -1,6 +1,9 @@
 /* Provide sufficient contrast against white background */
-
+* {
+  box-sizing: border-box;
+}
 body {
   background-color: rgb(248 249 250);
   margin: 0;
+  padding: 0;
 }
