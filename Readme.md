@@ -1,5 +1,11 @@
 # JATOUR 2.0
 
+Full complete End-to-End Trip social media app.
+
+<div align="center">
+    <img src="./asset/Jatour-1.PNG" alt="Logo" width="80" height="80">
+</div>
+
 ### Built with
 
 The section list major framework/libraries used in the project.
