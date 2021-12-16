@@ -1,16 +1,9 @@
-﻿import {
-  Box,
-  Button,
-  Container,
-  InputAdornment,
-  Modal,
-  Snackbar,
-  TextField,
-  Typography,
-} from "@mui/material";
+﻿import { Button, Container, Modal, Snackbar, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import React, { forwardRef, SyntheticEvent, useState } from "react";
+import CreateEditTripForm from "../Form/CreateEditTrip";
+import { Trip } from "../../Models/trip";
 
 const useStyles = makeStyles({
   Modal: {
@@ -36,13 +29,6 @@ const useStyles = makeStyles({
     width: "100%",
     padding: "0 30px",
   },
-  form: {
-    padding: 30,
-  },
-  formItem: {
-    marginBottom: 25,
-    marginRight: 20,
-  },
 });
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -51,17 +37,20 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
 ) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
-
-export default function TripFormModal() {
-  const [open, setOpen] = useState(false);
-  //   const [startDate, setStartDate] = useState<Date | null>(null);
+interface Props {
+  // createOrEdit={createOrEdit}
+  createOrEdit: (trip: Trip) => void;
+}
+export default function TripFormModal({ createOrEdit }: Props) {
+  const [openModal, setOpenModal] = useState(false);
   const [openSnackbar, setSnackbar] = useState(false);
-  //   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+
+  const handleOpenModal = () => setOpenModal(true);
+  const handleModalClose = () => setOpenModal(false);
   //   SnackBar function
   const handleSnackBarClick = () => {
     setSnackbar(true);
-    handleClose();
+    handleModalClose();
   };
   const handleSnackBarClose = (
     event?: SyntheticEvent | Event,
@@ -79,13 +68,17 @@ export default function TripFormModal() {
       <Button
         sx={{ mb: 2 }}
         className={classes.button}
-        onClick={() => setOpen(true)}
+        onClick={handleOpenModal}
         size="medium"
       >
         Create Trip
       </Button>
       {/* Modal Form */}
-      <Modal className={classes.Modal} open={open} onClose={handleClose}>
+      <Modal
+        className={classes.Modal}
+        open={openModal}
+        onClose={handleModalClose}
+      >
         <Container className={classes.container}>
           <Typography
             variant="h4"
@@ -93,135 +86,14 @@ export default function TripFormModal() {
             gutterBottom
             sx={{ m: 2, textAlign: "center" }}
           >
-            Add Trip 😉
+            Add Trip <span role="img">😉</span>
           </Typography>
-          <form className={classes.form} autoComplete="off">
-            {/* title */}
-            <div className={classes.formItem}>
-              <TextField
-                id="title"
-                label="Title"
-                size="small"
-                variant="outlined"
-                fullWidth
-              />
-            </div>
-            <Box sx={{ display: "flex" }}>
-              {/* startDate: Date; */}
-              <div className={classes.formItem}>
-                <TextField
-                  label="Start-Date"
-                  type="date"
-                  size="small"
-                  variant="outlined"
-                  placeholder="2017-05-24"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              </div>
-              {/* endDate: Date; */}
-              <div className={classes.formItem}>
-                <TextField
-                  label="End-Date"
-                  type="date"
-                  size="small"
-                  variant="outlined"
-                  placeholder="2017-05-24"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              </div>
-            </Box>
-            {/* picCoverUrl: string */}
-            <div className={classes.formItem}>
-              <TextField
-                id="picCover"
-                label="Cover Picture"
-                size="small"
-                variant="outlined"
-                fullWidth
-              />
-            </div>
-
-            <Box sx={{ display: "flex" }}>
-              {/* cost: number */}
-              <div className={classes.formItem}>
-                <TextField
-                  id="amount"
-                  size="small"
-                  variant="outlined"
-                  placeholder="Cost.."
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">$</InputAdornment>
-                    ),
-                  }}
-                />
-              </div>
-              {/* Duration */}
-              <div className={classes.formItem}>
-                <TextField
-                  id="duration"
-                  label="Duration"
-                  size="small"
-                  variant="outlined"
-                />
-              </div>
-              {/* rating */}
-              <div className={classes.formItem}>
-                <TextField
-                  id="rating"
-                  label="Rating"
-                  size="small"
-                  variant="outlined"
-                />
-              </div>
-            </Box>
-            {/* Location */}
-            <div className={classes.formItem}>
-              <TextField
-                id="location"
-                label="Location"
-                size="small"
-                variant="outlined"
-                fullWidth
-              />
-            </div>
-            {/* shortDescription: string; */}
-            {/* description: string; */}
-            <div className={classes.formItem}>
-              <TextField
-                id="outlined-multiline-static"
-                label="Description"
-                variant="outlined"
-                multiline
-                rows={4}
-                placeholder="Tell your experience..."
-                fullWidth
-              />
-            </div>
-
-            {/* Button */}
-            <div className={classes.formItem}>
-              <Button
-                variant="outlined"
-                onClick={handleSnackBarClick}
-                color="primary"
-                sx={{ mr: 5 }}
-              >
-                Create
-              </Button>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleClose}
-              >
-                Cancel
-              </Button>
-            </div>
-          </form>
+          <CreateEditTripForm
+            createOrEdit={createOrEdit}
+            handleOpenModal={handleOpenModal}
+            handleModalClose={handleModalClose}
+            handleSnackBarClick={handleSnackBarClick}
+          />
         </Container>
       </Modal>
       {/* Snackbar */}

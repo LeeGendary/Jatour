@@ -1,33 +1,28 @@
-import React, { useState} from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Route } from 'react-router';
-import { Layout } from './components/Layout';
-import  Home  from './pages/HomePage/Home';
-import Header from './components/header/Header';
+import React, { useState } from "react";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Route } from "react-router";
+import Home from "./pages/HomePage/Home";
+import Header from "./components/header/Header";
 
-import './custom.css'
+import "./custom.css";
 
 export default function App() {
+  const [mode, setMode] = useState<string | "light">("light");
 
-    const [mode, setMode] = useState('light');
-    
+  const theme = createTheme({
+    palette: {
+      mode,
+    },
+  });
 
-    const theme = createTheme({
-                palette: {
-                    mode,
-                },
-            });
+  function handleThemeChange() {
+    setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+  }
 
-    function handleThemeChange() {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
-    }
-
-    return (
-
-            <ThemeProvider theme={theme}>
-               <Header handleThemeChange={handleThemeChange} />
-               <Route exact path='/' component={Home} />
-            </ThemeProvider>
-    );
-  
+  return (
+    <ThemeProvider theme={theme}>
+      <Header handleThemeChange={handleThemeChange} />
+      <Route exact path="/" component={Home} />
+    </ThemeProvider>
+  );
 }

@@ -1,6 +1,5 @@
 ﻿import { Home } from "@mui/icons-material";
 import {
-  Button,
   List,
   ListItem,
   ListItemIcon,
@@ -13,6 +12,7 @@ import { makeStyles } from "@mui/styles";
 import ChatIcon from "@mui/icons-material/Chat";
 import React, { useState } from "react";
 import TripFormModal from "../../components/TripForm/TripForm";
+import { Trip } from "../../Models/trip";
 
 const useStyles = makeStyles({
   container: {
@@ -32,15 +32,18 @@ const useStyles = makeStyles({
     marginBottom: 3,
   },
 });
-
-export default function LeftBar() {
+interface Props {
+  // createOrEdit={createOrEdit}
+  createOrEdit: (trip: Trip) => void;
+}
+export default function LeftBar({ createOrEdit }: Props) {
   const classes = useStyles();
   return (
     <Container
       className={classes.container}
       sx={{ pt: 4, justifyContent: "center" }}
     >
-      <TripFormModal />
+      <TripFormModal createOrEdit={createOrEdit} />
       <Typography variant="h6" gutterBottom>
         Members
       </Typography>
