@@ -3,7 +3,7 @@
 Full complete End-to-End Trip social media app.
 
 <div align="center">
-    <img src="./asset/Jatour-1.PNG" alt="Logo" width="500" >
+    <img src="./asset/Jatour-1.PNG" alt="Logo" width="800" >
 </div>
 
 ### Built with
