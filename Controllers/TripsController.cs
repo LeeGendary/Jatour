@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace JaTour.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class TripsController : ControllerBase
     {

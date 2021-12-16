@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { Trip } from "../../Models/trip";
 import TripDashboard from "../Trip-Dashboard/TripDashboard";
 import { makeStyles } from "@mui/styles";
+import agent from "../../api/agent";
+import LoadingPage from "../LoadingPage/Loding";
 //Style
 // const useStyles = makeStyles({
 //   headerImage: {
@@ -21,26 +22,40 @@ import { makeStyles } from "@mui/styles";
 
 export default function Home() {
   const [trips, setTrips] = useState<Trip[]>([]);
-  // const [selectedTrip, setSelectedTrip] = useState<Trip | undefined>(undefined);
+  const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   useEffect(() => {
-    axios.get<Trip[]>("api/Trips").then((res) => {
-      const data = res.data;
-      setTrips(data);
+    agent.Trips.list().then((response) => {
+      setTrips(response);
+      setLoading(false);
     });
   }, []);
 
   function handleCreateOrEditTrip(trip: Trip) {
-    trip.id
-      ? setTrips([...trips.filter((x) => x.id !== trip.id), trip])
-      : setTrips([...trips, { ...trip, id: uuidv4() }]);
-    setEditMode(false);
+    setSubmitting(true);
+    if (trip.id) {
+      agent.Trips.update(trip).then(() => {
+        setTrips([...trips.filter((x) => x.id !== trip.id), trip]);
+        setEditMode(false);
+        // setSubmitting(false);
+      });
+    } else {
+      trip.id = uuidv4();
+      agent.Trips.create(trip).then(() => {
+        setTrips([...trips, trip]);
+        setEditMode(false);
+        // setSubmitting(false);
+      });
+    }
   }
 
   function handleDeleteTrip(id: string) {
     setTrips([...trips.filter((x) => x.id !== id)]);
   }
 
+  if (loading)
+    return <LoadingPage loading={loading} content="Loading content.." />;
   return (
     <>
       {/* <Box className={classes.headerImage}></Box> */}
