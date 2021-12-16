@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 import { Trip } from "../../Models/trip";
 import TripDashboard from "../Trip-Dashboard/TripDashboard";
 import { makeStyles } from "@mui/styles";
@@ -20,7 +21,8 @@ import { makeStyles } from "@mui/styles";
 
 export default function Home() {
   const [trips, setTrips] = useState<Trip[]>([]);
-  const [EditMode, setEditMode] = useState(false);
+  // const [selectedTrip, setSelectedTrip] = useState<Trip | undefined>(undefined);
+  const [editMode, setEditMode] = useState(false);
   useEffect(() => {
     axios.get<Trip[]>("api/Trips").then((res) => {
       const data = res.data;
@@ -31,9 +33,14 @@ export default function Home() {
   function handleCreateOrEditTrip(trip: Trip) {
     trip.id
       ? setTrips([...trips.filter((x) => x.id !== trip.id), trip])
-      : setTrips([...trips, trip]);
+      : setTrips([...trips, { ...trip, id: uuidv4() }]);
     setEditMode(false);
   }
+
+  function handleDeleteTrip(id: string) {
+    setTrips([...trips.filter((x) => x.id !== id)]);
+  }
+
   return (
     <>
       {/* <Box className={classes.headerImage}></Box> */}

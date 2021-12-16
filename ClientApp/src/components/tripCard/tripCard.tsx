@@ -17,7 +17,7 @@ export default function TripCard({ trip }: Props) {
       <CardMedia
         component="img"
         height="160"
-        image="https://www.natours.dev/img/tours/tour-2-cover.jpg"
+        image={trip.picCoverUrl}
         alt="green iguana"
       />
       <CardContent>
@@ -25,7 +25,10 @@ export default function TripCard({ trip }: Props) {
           {trip.title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {trip.shortDescription.substring(0, 10)}
+          {trip.description.substring(0, 30)}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Location: {trip.location} - Duration: {trip.duration}
         </Typography>
       </CardContent>
       <CardActions>

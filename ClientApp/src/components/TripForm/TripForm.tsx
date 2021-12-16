@@ -39,6 +39,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 interface Props {
   // createOrEdit={createOrEdit}
+  trip: Trip;
   createOrEdit: (trip: Trip) => void;
 }
 export default function TripFormModal({ createOrEdit }: Props) {
@@ -89,6 +90,7 @@ export default function TripFormModal({ createOrEdit }: Props) {
             Add Trip <span role="img">😉</span>
           </Typography>
           <CreateEditTripForm
+            trip
             createOrEdit={createOrEdit}
             handleOpenModal={handleOpenModal}
             handleModalClose={handleModalClose}

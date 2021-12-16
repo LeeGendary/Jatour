@@ -21,7 +21,6 @@ interface Props {
 export default function CreateEditTripForm({
   trip: selectedTrip,
   createOrEdit,
-  handleOpenModal,
   handleModalClose,
   handleSnackBarClick,
 }: Props) {
