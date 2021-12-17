@@ -1,7 +1,10 @@
 import { Box, Button, InputAdornment, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { Trip } from "../../Models/trip";
+
 import React, { ChangeEvent, FormEvent, useState } from "react";
+import { useStore } from "../../stores/store";
+import { observer } from "mobx-react-lite";
+import { Trip } from "../../Models/trip";
 const useStyles = makeStyles({
   form: {
     padding: 30,
@@ -12,18 +15,16 @@ const useStyles = makeStyles({
   },
 });
 interface Props {
-  trip: Trip | undefined;
-  createOrEdit: (trip: Trip) => void;
-  handleOpenModal: () => void;
-  handleModalClose: () => void;
   handleSnackBarClick: () => void;
 }
-export default function CreateEditTripForm({
-  trip: selectedTrip,
-  createOrEdit,
-  handleModalClose,
+export default observer(function CreateEditTripForm({
   handleSnackBarClick,
 }: Props) {
+  const { tripStore } = useStore();
+  const classes = useStyles();
+
+  const { selectedTrip, closeModalForm, createTrip, updateTrip } = tripStore;
+
   const initialState = selectedTrip ?? {
     id: "",
     title: "",
@@ -37,17 +38,9 @@ export default function CreateEditTripForm({
     location: "",
     cost: "",
     duration: "",
-    createdAt: "",
   };
-  const [trip, setTrip] = useState(initialState);
-  const classes = useStyles();
 
-  function handelSubmit(event: FormEvent) {
-    event.preventDefault();
-    createOrEdit(trip);
-    handleSnackBarClick();
-    handleModalClose();
-  }
+  const [trip, setTrip] = useState(initialState);
 
   function handleInputChange(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -55,6 +48,13 @@ export default function CreateEditTripForm({
     const { name, value } = event.target;
     setTrip({ ...trip, [name]: value });
   }
+
+  function handelSubmit(event: FormEvent) {
+    event.preventDefault();
+    trip.id ? updateTrip(trip as Trip) : createTrip(trip as Trip);
+    handleSnackBarClick();
+  }
+
   return (
     <>
       <form onSubmit={handelSubmit} className={classes.form} autoComplete="off">
@@ -201,15 +201,11 @@ export default function CreateEditTripForm({
           >
             Create
           </Button>
-          <Button
-            variant="outlined"
-            onClick={handleModalClose}
-            color="secondary"
-          >
+          <Button variant="outlined" onClick={closeModalForm} color="secondary">
             Cancel
           </Button>
         </div>
       </form>
     </>
   );
-}
+});

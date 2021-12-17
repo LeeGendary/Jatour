@@ -1,4 +1,4 @@
-﻿import React from "react";
+﻿import React, { SyntheticEvent } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -6,12 +6,21 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Trip } from "../../Models/trip";
+import { useStore } from "../../stores/store";
 
 interface Props {
   trip: Trip;
 }
 
 export default function TripCard({ trip }: Props) {
+  // const [target, setTarget] = useState("");
+  const { tripStore } = useStore();
+  const { deleteTrip, selectTrip } = tripStore;
+
+  function handleTripDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
+    // setTarget(e.currentTarget.name);
+    deleteTrip(id);
+  }
   return (
     <Card elevation={3} sx={{ maxWidth: 345 }}>
       <CardMedia
@@ -25,15 +34,24 @@ export default function TripCard({ trip }: Props) {
           {trip.title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {trip.description.substring(0, 30)}
+          {trip.description}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Location: {trip.location} - Duration: {trip.duration}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
+        <Button onClick={() => selectTrip(trip.id)} size="small" color="info">
+          View
+        </Button>
+        <Button
+          name={trip.id}
+          onClick={(e) => handleTripDelete(e, trip.id)}
+          size="small"
+          color="error"
+        >
+          Delete
+        </Button>
       </CardActions>
     </Card>
   );

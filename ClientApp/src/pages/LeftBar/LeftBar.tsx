@@ -10,9 +10,8 @@ import { Container, Typography, AvatarGroup, Avatar } from "@mui/material";
 import { deepOrange, deepPurple } from "@mui/material/colors";
 import { makeStyles } from "@mui/styles";
 import ChatIcon from "@mui/icons-material/Chat";
-import React, { useState } from "react";
+import React from "react";
 import TripFormModal from "../../components/TripForm/TripForm";
-import { Trip } from "../../Models/trip";
 
 const useStyles = makeStyles({
   container: {
@@ -32,18 +31,15 @@ const useStyles = makeStyles({
     marginBottom: 3,
   },
 });
-interface Props {
-  // createOrEdit={createOrEdit}
-  createOrEdit: (trip: Trip) => void;
-}
-export default function LeftBar({ createOrEdit }: Props) {
+
+export default function LeftBar() {
   const classes = useStyles();
   return (
     <Container
       className={classes.container}
       sx={{ pt: 4, justifyContent: "center" }}
     >
-      <TripFormModal createOrEdit={createOrEdit} />
+      <TripFormModal />
       <Typography variant="h6" gutterBottom>
         Members
       </Typography>

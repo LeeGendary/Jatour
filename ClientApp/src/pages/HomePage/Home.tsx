@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { Trip } from "../../Models/trip";
+import React, { useEffect } from "react";
 import TripDashboard from "../Trip-Dashboard/TripDashboard";
-import { makeStyles } from "@mui/styles";
-import agent from "../../api/agent";
+// import { makeStyles } from "@mui/styles";
 import LoadingPage from "../LoadingPage/Loding";
-//Style
+import { useStore } from "../../stores/store";
+import { observer } from "mobx-react-lite";
+
+//{Style
 // const useStyles = makeStyles({
 //   headerImage: {
 //     display: "flex",
@@ -19,47 +19,26 @@ import LoadingPage from "../LoadingPage/Loding";
 //     transform: "translate3d(0px, 18.6667px, 0px)",
 //   },
 // });
+//}
 
-export default function Home() {
-  const [trips, setTrips] = useState<Trip[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [editMode, setEditMode] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+export default observer(function Home() {
+  const { tripStore } = useStore();
+
   useEffect(() => {
-    agent.Trips.list().then((response) => {
-      setTrips(response);
-      setLoading(false);
-    });
-  }, []);
+    tripStore.loadTrips();
+  }, [tripStore]);
 
-  function handleCreateOrEditTrip(trip: Trip) {
-    setSubmitting(true);
-    if (trip.id) {
-      agent.Trips.update(trip).then(() => {
-        setTrips([...trips.filter((x) => x.id !== trip.id), trip]);
-        setEditMode(false);
-        // setSubmitting(false);
-      });
-    } else {
-      trip.id = uuidv4();
-      agent.Trips.create(trip).then(() => {
-        setTrips([...trips, trip]);
-        setEditMode(false);
-        // setSubmitting(false);
-      });
-    }
-  }
-
-  function handleDeleteTrip(id: string) {
-    setTrips([...trips.filter((x) => x.id !== id)]);
-  }
-
-  if (loading)
-    return <LoadingPage loading={loading} content="Loading content.." />;
+  if (tripStore.loadingInitial)
+    return (
+      <LoadingPage
+        loading={tripStore.loadingInitial}
+        content="Loading content.."
+      />
+    );
   return (
     <>
       {/* <Box className={classes.headerImage}></Box> */}
-      <TripDashboard trips={trips} createOrEdit={handleCreateOrEditTrip} />
+      <TripDashboard />
     </>
   );
-}
+});

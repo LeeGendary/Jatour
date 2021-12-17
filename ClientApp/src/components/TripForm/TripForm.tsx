@@ -4,6 +4,8 @@ import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import React, { forwardRef, SyntheticEvent, useState } from "react";
 import CreateEditTripForm from "../Form/CreateEditTrip";
 import { Trip } from "../../Models/trip";
+import { useStore } from "../../stores/store";
+import { observer } from "mobx-react-lite";
 
 const useStyles = makeStyles({
   Modal: {
@@ -37,17 +39,16 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
 ) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
-interface Props {
-  // createOrEdit={createOrEdit}
-  trip: Trip;
-  createOrEdit: (trip: Trip) => void;
-}
-export default function TripFormModal({ createOrEdit }: Props) {
-  const [openModal, setOpenModal] = useState(false);
+export default observer(function TripFormModal() {
+  const { tripStore } = useStore();
   const [openSnackbar, setSnackbar] = useState(false);
 
-  const handleOpenModal = () => setOpenModal(true);
-  const handleModalClose = () => setOpenModal(false);
+  const handleOpenModal = () => {
+    tripStore.openModalForm(tripStore.selectedTrip?.id);
+  };
+  const handleModalClose = () => {
+    tripStore.closeModalForm();
+  };
   //   SnackBar function
   const handleSnackBarClick = () => {
     setSnackbar(true);
@@ -77,8 +78,8 @@ export default function TripFormModal({ createOrEdit }: Props) {
       {/* Modal Form */}
       <Modal
         className={classes.Modal}
-        open={openModal}
-        onClose={handleModalClose}
+        open={tripStore.editMode}
+        onClose={tripStore.closeModalForm}
       >
         <Container className={classes.container}>
           <Typography
@@ -89,13 +90,7 @@ export default function TripFormModal({ createOrEdit }: Props) {
           >
             Add Trip <span role="img">😉</span>
           </Typography>
-          <CreateEditTripForm
-            trip
-            createOrEdit={createOrEdit}
-            handleOpenModal={handleOpenModal}
-            handleModalClose={handleModalClose}
-            handleSnackBarClick={handleSnackBarClick}
-          />
+          <CreateEditTripForm handleSnackBarClick={handleSnackBarClick} />
         </Container>
       </Modal>
       {/* Snackbar */}
@@ -114,4 +109,4 @@ export default function TripFormModal({ createOrEdit }: Props) {
       </Snackbar>
     </>
   );
-}
+});
