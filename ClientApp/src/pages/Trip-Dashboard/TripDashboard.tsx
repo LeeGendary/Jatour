@@ -8,7 +8,7 @@ import { observer } from "mobx-react-lite";
 
 export default observer(function TripDashboard() {
   const { tripStore } = useStore();
-  const { trips } = tripStore;
+  const { tripsByDate } = tripStore;
   return (
     <Grid container spacing={2}>
       <Grid item xs={4} md={2}>
@@ -23,7 +23,7 @@ export default observer(function TripDashboard() {
             pt: 4,
           }}
         >
-          {trips.map((tripItem) => (
+          {tripsByDate.map((tripItem) => (
             <TripCard key={tripItem.id} trip={tripItem} />
           ))}
         </Container>

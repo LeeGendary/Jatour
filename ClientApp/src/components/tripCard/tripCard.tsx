@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Trip } from "../../Models/trip";
 import { useStore } from "../../stores/store";
+import { Link } from "react-router-dom";
 
 interface Props {
   trip: Trip;
@@ -15,7 +16,7 @@ interface Props {
 export default function TripCard({ trip }: Props) {
   // const [target, setTarget] = useState("");
   const { tripStore } = useStore();
-  const { deleteTrip, selectTrip } = tripStore;
+  const { deleteTrip } = tripStore;
 
   function handleTripDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
     // setTarget(e.currentTarget.name);
@@ -41,7 +42,12 @@ export default function TripCard({ trip }: Props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button onClick={() => selectTrip(trip.id)} size="small" color="info">
+        <Button
+          component={Link}
+          to={`/details/${trip.id}`}
+          size="small"
+          color="info"
+        >
           View
         </Button>
         <Button

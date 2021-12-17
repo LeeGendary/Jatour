@@ -75,7 +75,11 @@ interface Props {
   handleThemeChange: () => void;
 }
 // dropdown menu
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const dropdownMenu = [
+  { title: "Profile", path: "/profile" },
+  { title: "Setting", path: "/setting" },
+  { title: "Logout", path: "/" },
+];
 
 export default function Header({ handleThemeChange }: Props) {
   const theme = useTheme();
@@ -180,9 +184,9 @@ export default function Header({ handleThemeChange }: Props) {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-            {settings.map((setting) => (
-              <MenuItem key={setting} onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">{setting}</Typography>
+            {dropdownMenu.map(({ title, path }) => (
+              <MenuItem component={NavLink} key={path} to={path}>
+                <Typography textAlign="center">{title}</Typography>
               </MenuItem>
             ))}
           </Menu>

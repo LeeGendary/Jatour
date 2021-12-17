@@ -3,7 +3,6 @@ import { makeStyles } from "@mui/styles";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import React, { forwardRef, SyntheticEvent, useState } from "react";
 import CreateEditTripForm from "../Form/CreateEditTrip";
-import { Trip } from "../../Models/trip";
 import { useStore } from "../../stores/store";
 import { observer } from "mobx-react-lite";
 
