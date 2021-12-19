@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -28,6 +29,7 @@ namespace JaTour.Controllers
         }
 
         // Get One Trip
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Trip>> GetTrip(Guid id) {
             return await _context.Trips.FindAsync(id);

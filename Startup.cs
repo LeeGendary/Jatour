@@ -61,6 +61,11 @@ namespace JaTour
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+            app.UseCors();
+
+            app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -69,7 +74,7 @@ namespace JaTour
                     pattern: "{controller}/{action=Index}/{id?}");
             });
 
-            app.UseCors();
+            
 
             app.UseSpa(spa =>
             {
