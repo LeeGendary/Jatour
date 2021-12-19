@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Threading.Tasks;
 using JaTour.DTOs;
 using JaTour.Services;
@@ -23,15 +24,16 @@ namespace JaTour.Controllers
             _userManager = userManager;
         }
 
-        //private userdto createuser(userdto user)
-        //{
-        //    return new userdto{
-        //        displayname = user.displayname,
-        //        image = null,
-        //        token = _tokenservice.createtoken(user),
-        //        username = user.username
-        //    };
-        //}
+        private UserDto createuserobject(AppUser user)
+        {
+            return new UserDto
+            {
+                DisplayName = user.DisplayName,
+                Image = null,
+                Token = _tokenService.CreateToken(user),
+                Username = user.UserName
+            };
+        }
 
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
@@ -41,13 +43,7 @@ namespace JaTour.Controllers
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
             if(result.Succeeded)
             {
-                return new UserDto
-                {
-                    DisplayName = user.DisplayName,
-                    Image = null,
-                    Token = _tokenService.CreateToken(user),
-                    Username = user.UserName
-                };
+                return createuserobject(user);
             }
 
             return Unauthorized();
@@ -77,17 +73,18 @@ namespace JaTour.Controllers
 
             if(result.Succeeded)
             {
-                return new UserDto
-                {
-                    DisplayName = user.DisplayName,
-                    Image = null,
-                    Token = _tokenService.CreateToken(user),
-                    Username = user.UserName
-                };
+                return createuserobject(user);
             }
 
             return BadRequest("Problem registering user");
 
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        {
+            var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+            return createuserobject(user);
         }
     }
 }
