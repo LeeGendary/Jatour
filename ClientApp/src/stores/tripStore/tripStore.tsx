@@ -18,6 +18,8 @@ export default class TripStore {
   }
 
   private setTrip = (trip: Trip) => {
+    trip.startDate = new Date(trip.startDate!);
+    trip.endDate = new Date(trip.endDate!);
     this.tripRegistry.set(trip.id, trip);
   };
 
@@ -29,7 +31,6 @@ export default class TripStore {
       tripsload.forEach((trip) => {
         this.setTrip(trip);
       });
-
       this.setLoadingInitial(false);
     } catch (error) {
       console.log(error);
@@ -83,6 +84,8 @@ export default class TripStore {
   createTrip = async (trip: Trip) => {
     this.loading = true;
     trip.id = uuidv4();
+    trip.startDate = new Date(trip.startDate!);
+    trip.endDate = new Date(trip.endDate!);
     try {
       await agent.Trips.create(trip as Trip);
 
@@ -140,8 +143,10 @@ export default class TripStore {
 
   //GET By Date Order
   // Issues: StartDate return string
+  // Fix
   get tripsByDate() {
-    return Array.from(this.tripRegistry.values());
-    //  .sort((a, b) => Date.parse(a.startDate) - Date.parse(b.startDate))
+    return Array.from(this.tripRegistry.values()).sort(
+      (a, b) => a.startDate!.getTime() - b.startDate!.getTime()
+    );
   }
 }

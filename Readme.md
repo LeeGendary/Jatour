@@ -14,7 +14,7 @@ The section list major framework/libraries used in the project.
 - Material UI
 - MobX (state management)
 - .Net Core (backend API)
-- JWT
+- JWT token Authentication
 
 ### Installation
 

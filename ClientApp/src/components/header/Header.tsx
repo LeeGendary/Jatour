@@ -21,6 +21,7 @@ import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { NavLink } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { useState } from "react";
+import { Dehaze } from "@mui/icons-material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -33,7 +34,7 @@ const Search = styled("div")(({ theme }) => ({
   width: "100%",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(1),
-    width: "auto",
+    width: "50ch",
   },
 }));
 
@@ -56,9 +57,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("sm")]: {
-      width: "12ch",
+      width: "25ch",
       "&:focus": {
-        width: "20ch",
+        width: "50ch",
       },
     },
   },
@@ -105,6 +106,14 @@ export default function Header({ handleThemeChange }: Props) {
         }}
       >
         <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
+          <IconButton
+            size="large"
+            aria-label="show 4 new mails"
+            color="inherit"
+            sx={{ mr: 1 }}
+          >
+            <Dehaze />
+          </IconButton>
           <Typography
             variant="h6"
             noWrap

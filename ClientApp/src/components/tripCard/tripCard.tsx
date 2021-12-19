@@ -8,6 +8,18 @@ import Typography from "@mui/material/Typography";
 import { Trip } from "../../Models/trip";
 import { useStore } from "../../stores/store";
 import { Link } from "react-router-dom";
+import { Avatar, CardHeader, Divider, IconButton } from "@mui/material";
+import {
+  AccessTime,
+  Delete,
+  Favorite,
+  LocationOn,
+  MoreVert,
+  Share,
+  Star,
+} from "@mui/icons-material";
+import { red } from "@mui/material/colors";
+import { Box } from "@mui/system";
 
 interface Props {
   trip: Trip;
@@ -23,41 +35,77 @@ export default function TripCard({ trip }: Props) {
     deleteTrip(id);
   }
   return (
-    <Card elevation={3} sx={{ maxWidth: 345 }}>
+    <Card raised={true} sx={{ maxWidth: 500 }}>
       <CardMedia
         component="img"
-        height="160"
+        height="200"
         image={trip.picCoverUrl}
         alt="green iguana"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {trip.title}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {trip.description}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Location: {trip.location} - Duration: {trip.duration}
-        </Typography>
+        <Box sx={{ display: "flex", flexDirection: "column", padding: "20px" }}>
+          <Typography
+            sx={{ color: "rgb(99 115 129)" }}
+            gutterBottom
+            variant="subtitle2"
+            component="div"
+          >
+            {trip.title}
+          </Typography>
+          <Typography variant="h6" color="text.secondary">
+            {trip.description}
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          <IconButton aria-label="add to favorites">
+            <LocationOn />
+            <Typography variant="body2" color="text.secondary">
+              {trip.location}
+            </Typography>
+          </IconButton>
+          <IconButton aria-label="add to favorites">
+            <AccessTime />
+            <Typography variant="body2" color="text.secondary">
+              {trip.duration}
+            </Typography>
+          </IconButton>
+        </Box>
       </CardContent>
-      <CardActions>
-        <Button
-          component={Link}
-          to={`/details/${trip.id}`}
-          size="small"
-          color="info"
-        >
-          View
-        </Button>
-        <Button
-          name={trip.id}
-          onClick={(e) => handleTripDelete(e, trip.id)}
-          size="small"
-          color="error"
-        >
-          Delete
-        </Button>
+      <Divider variant="middle" />
+      <CardActions sx={{ justifyContent: "space-between", padding: "20px" }}>
+        <Box>
+          <IconButton aria-label="add to favorites">
+            <Favorite />
+          </IconButton>
+          <IconButton aria-label="share">
+            <Star sx={{ color: "rgb(255, 200, 26)" }} />
+            <Typography variant="h6">{trip.rating}</Typography>
+          </IconButton>
+        </Box>
+        <Box>
+          <Button
+            component={Link}
+            to={`/details/${trip.id}`}
+            size="small"
+            color="info"
+          >
+            Details
+          </Button>
+
+          <IconButton
+            name={trip.id}
+            color="error"
+            aria-label="delete"
+            onClick={(e) => handleTripDelete(e, trip.id)}
+          >
+            <Delete />
+          </IconButton>
+        </Box>
       </CardActions>
     </Card>
   );

@@ -19,6 +19,7 @@ const useStyles = makeStyles({
     background:
       "linear-gradient(-59deg, rgb(152, 175, 189), rgb(33, 183, 213)) !important",
     height: "100vh",
+    position: "sticky",
     color: "white",
     border: "1px solid rgb(33, 183, 213)",
     borderTop: "none",
@@ -57,7 +58,7 @@ export default function LeftBar() {
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <Home sx={{ mr: 1, color: "inherit" }} />
+              <Home sx={{ mr: 1, color: "white" }} />
             </ListItemIcon>
             <ListItemText primary="Home" />
           </ListItemButton>
@@ -65,7 +66,7 @@ export default function LeftBar() {
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <ChatIcon sx={{ mr: 1, color: "inherit" }} />
+              <ChatIcon sx={{ mr: 1, color: "white" }} />
             </ListItemIcon>
             <ListItemText primary="Chat" />
           </ListItemButton>
