@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using JaTour.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,9 +17,12 @@ namespace JaTour.Controllers
     public class TripsController : ControllerBase
     {
         private readonly DataContext _context;
-        public TripsController(DataContext context)
+        private readonly IUserAccessor _usserAccessor;
+
+        public TripsController(DataContext context, IUserAccessor usserAccessor )
         {
             _context = context;
+            _usserAccessor = usserAccessor;
         }
 
         // Get All trip
@@ -39,6 +43,14 @@ namespace JaTour.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTrip(Trip trip)
         {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _usserAccessor.Getusername());
+            var attendee = new TripAttendee
+            {
+                AppUser = user,
+                Trip = trip,
+                IsHost = true
+            };
+            trip.Attendees.Add(attendee);
             _context.Trips.Add(trip);
             await _context.SaveChangesAsync();
             return Ok();

@@ -1,4 +1,6 @@
 using JaTour.Extensions;
+using JaTour.Interfaces;
+using JaTour.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -37,7 +39,7 @@ namespace JaTour
                 opt.UseSqlite(_config.GetConnectionString("DefaultConnection"));
             });
             services.AddCors();
-
+            services.AddScoped<IUserAccessor, UserAccessor>();
 
             services.AddIdentityServices(_config);
         }
