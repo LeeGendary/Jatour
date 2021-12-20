@@ -44,13 +44,15 @@ namespace JaTour.Controllers
         public async Task<IActionResult> CreateTrip(Trip trip)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _usserAccessor.Getusername());
+
             var attendee = new TripAttendee
             {
                 AppUser = user,
                 Trip = trip,
                 IsHost = true
             };
-            trip.Attendees.Add(attendee);
+
+            //trip.Attendees.Add(attendee);
             _context.Trips.Add(trip);
             await _context.SaveChangesAsync();
             return Ok();
