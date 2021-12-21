@@ -95,7 +95,7 @@ interface Props {
 const dropdownMenu = [
   { title: "Profile", path: "/profile" },
   { title: "Setting", path: "/setting" },
-  { title: "Logout", path: "/" },
+  { title: "Logout", path: "/home" },
 ];
 
 export default observer(function Header({ handleThemeChange }: Props) {
@@ -129,29 +129,16 @@ export default observer(function Header({ handleThemeChange }: Props) {
         }}
       >
         <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
-          {themeStore.drawerState ? (
-            <IconButton
-              size="large"
-              sx={{ mr: 1 }}
-              color="inherit"
-              onClick={handleDrawerClose}
-            >
-              <Dehaze />
-            </IconButton>
-          ) : (
-            <IconButton
-              sx={{ mr: 1 }}
-              size="large"
-              color="inherit"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{
-                marginRight: "36px",
-              }}
-            >
-              <Dehaze />
-            </IconButton>
-          )}
+          <IconButton
+            sx={{ mr: 1 }}
+            size="large"
+            color="inherit"
+            onClick={
+              themeStore.drawerState ? handleDrawerClose : handleDrawerOpen
+            }
+          >
+            <Dehaze />
+          </IconButton>
           <Typography
             variant="h6"
             noWrap
@@ -162,7 +149,7 @@ export default observer(function Header({ handleThemeChange }: Props) {
               color: "inherit",
               textDecoration: "none",
             }}
-            to="/"
+            to="/home"
           >
             Jatour
           </Typography>

@@ -14,6 +14,8 @@ import { Box } from "@mui/system";
 import { observer } from "mobx-react-lite";
 import { useStore } from "./stores/store";
 import LoadingPage from "./pages/LoadingPage/Loding";
+import SignInSide from "./components/Form/LoginForm";
+import { Switch } from "react-router-dom";
 
 export default observer(function App() {
   const { tripStore } = useStore();
@@ -43,16 +45,22 @@ export default observer(function App() {
     );
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ display: "flex" }}>
-        <Header handleThemeChange={handleThemeChange} />
-        <LeftBar />
-        <Box component="main" sx={{ flexGrow: 1, mt: 10 }}>
-          <Route exact path="/" component={Layout} />
-          <Route path="/details/:id" component={tripDetails} />
-          <Route path="/profile" component={profilePage} />
-          <Route path="/setting" component={settingPage} />
-        </Box>
-      </Box>
+      <Route exact path="/" component={SignInSide} />
+      <Route
+        path={"/(.+)"}
+        render={() => (
+          <Box sx={{ display: "flex" }}>
+            <Header handleThemeChange={handleThemeChange} />
+            <LeftBar />
+            <Box component="main" sx={{ flexGrow: 1, mt: 10 }}>
+              <Route exact path="/home" component={Layout} />
+              <Route path="/details/:id" component={tripDetails} />
+              <Route path="/profile" component={profilePage} />
+              <Route path="/setting" component={settingPage} />
+            </Box>
+          </Box>
+        )}
+      />
     </ThemeProvider>
   );
 });

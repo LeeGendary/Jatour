@@ -43,7 +43,8 @@ namespace JaTour.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTrip(Trip trip)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _usserAccessor.Getusername());
+            var user = await _context.Users.FirstOrDefaultAsync(x => 
+            x.UserName == _usserAccessor.Getusername());
 
             var attendee = new TripAttendee
             {
@@ -52,11 +53,12 @@ namespace JaTour.Controllers
                 IsHost = true
             };
 
-            //trip.Attendees.Add(attendee);
+            trip.Attendees.Add(attendee);
             _context.Trips.Add(trip);
             await _context.SaveChangesAsync();
             return Ok();
         }
+
         // Update trip
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTrip(Guid id, [FromBody]Trip trip)

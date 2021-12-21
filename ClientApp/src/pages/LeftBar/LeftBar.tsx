@@ -1,4 +1,5 @@
-﻿import { Add, Home, Logout, Person, Settings } from "@mui/icons-material";
+﻿import { Home, Logout, Person, Settings } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 import {
   CSSObject,
   Drawer,
@@ -75,22 +76,22 @@ export default observer(function LeftBar() {
     {
       text: "Messages",
       icon: <ChatIcon />,
-      path: "/",
+      path: "/home",
     },
     {
       text: "Friends",
       icon: <Person />,
-      path: "/",
+      path: "/home",
     },
     {
       text: "Setting",
       icon: <Settings />,
-      path: "/",
+      path: "/home",
     },
     {
       text: "Logout",
       icon: <Logout />,
-      path: "/",
+      path: "/home",
     },
   ];
   return (
@@ -102,7 +103,7 @@ export default observer(function LeftBar() {
       <List sx={{ mt: 10 }}>
         <TripFormModal />
         {menuItems.map((item) => (
-          <ListItem button key={item.text}>
+          <ListItem button component={Link} key={item.text} to={item.path}>
             <ListItemIcon sx={{ color: "white" }}>{item.icon}</ListItemIcon>
             <ListItemText primary={item.text} />
           </ListItem>
