@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { Trip } from "../Models/trip";
+import { User, UserFormValues } from "../Models/user";
 
 const sleep = (delay: number) => {
   return new Promise((resolve) => {
@@ -36,8 +37,16 @@ const Trips = {
   delete: (id: string) => request.del<void>(`/Trips/${id}`),
 };
 
+const Account = {
+  current: () => request.get<User>("/account"),
+  login: (user: UserFormValues) => request.post<User>("/account/login", user),
+  register: (user: UserFormValues) =>
+    request.post<User>("/account/register", user),
+};
+
 const agent = {
   Trips,
+  Account,
 };
 
 export default agent;
