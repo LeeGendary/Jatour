@@ -19,9 +19,5 @@ export default observer(function Home() {
         content="Loading content.."
       />
     );
-  return (
-    <>
-      <TripDashboard />
-    </>
-  );
+  return <></>;
 });

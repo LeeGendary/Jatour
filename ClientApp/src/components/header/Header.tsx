@@ -1,7 +1,6 @@
 ﻿import * as React from "react";
 import { useTheme, styled, alpha } from "@mui/material/styles";
 import {
-  AppBar,
   Toolbar,
   IconButton,
   Typography,
@@ -22,6 +21,23 @@ import { NavLink } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { useState } from "react";
 import { Dehaze } from "@mui/icons-material";
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import { observer } from "mobx-react-lite";
+import { useStore } from "../../stores/store";
+
+interface AppBarProps {
+  open?: boolean;
+}
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== "open",
+})<AppBarProps>(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(["width", "margin"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+}));
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -82,22 +98,29 @@ const dropdownMenu = [
   { title: "Logout", path: "/" },
 ];
 
-export default function Header({ handleThemeChange }: Props) {
+export default observer(function Header({ handleThemeChange }: Props) {
   const theme = useTheme();
   const classes = useStyles();
+  const { themeStore } = useStore();
+  const { setdrawerState } = themeStore;
+  const handleDrawerOpen = () => {
+    setdrawerState(true);
+  };
+  const handleDrawerClose = () => {
+    setdrawerState(false);
+  };
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
-  const handleCloseNavMenu = () => {};
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
 
   return (
-    <AppBar position="static" className={classes.header}>
+    <AppBar position="fixed" className={classes.header}>
       <Toolbar
         sx={{
           display: "flex",
@@ -106,14 +129,29 @@ export default function Header({ handleThemeChange }: Props) {
         }}
       >
         <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
-          <IconButton
-            size="large"
-            aria-label="show 4 new mails"
-            color="inherit"
-            sx={{ mr: 1 }}
-          >
-            <Dehaze />
-          </IconButton>
+          {themeStore.drawerState ? (
+            <IconButton
+              size="large"
+              sx={{ mr: 1 }}
+              color="inherit"
+              onClick={handleDrawerClose}
+            >
+              <Dehaze />
+            </IconButton>
+          ) : (
+            <IconButton
+              sx={{ mr: 1 }}
+              size="large"
+              color="inherit"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                marginRight: "36px",
+              }}
+            >
+              <Dehaze />
+            </IconButton>
+          )}
           <Typography
             variant="h6"
             noWrap
@@ -203,4 +241,4 @@ export default function Header({ handleThemeChange }: Props) {
       </Toolbar>
     </AppBar>
   );
-}
+});

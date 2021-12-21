@@ -1,10 +1,20 @@
-﻿import { Button, Container, Modal, Snackbar, Typography } from "@mui/material";
+﻿import {
+  Button,
+  Container,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Modal,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import React, { forwardRef, SyntheticEvent, useState } from "react";
 import CreateEditTripForm from "../Form/CreateEditTrip";
 import { useStore } from "../../stores/store";
 import { observer } from "mobx-react-lite";
+import { Add } from "@mui/icons-material";
 
 const useStyles = makeStyles({
   Modal: {
@@ -23,12 +33,9 @@ const useStyles = makeStyles({
     textDecoration: "none",
     background: "linear-gradient(to right, #ff5f6d, #ffc371);",
     border: 0,
-    borderRadius: 3,
     boxShadow: "0 3px 5px 2px #ff5f6cdd",
     color: "white !important",
-    height: 48,
     width: "100%",
-    padding: "0 30px",
   },
 });
 
@@ -66,14 +73,17 @@ export default observer(function TripFormModal() {
   const classes = useStyles();
   return (
     <>
-      <Button
-        sx={{ mb: 2 }}
+      <ListItem
+        button
         className={classes.button}
+        key="Add Trip"
         onClick={handleOpenModal}
-        size="medium"
       >
-        Create Trip
-      </Button>
+        <ListItemIcon sx={{ color: "white" }}>
+          <Add />
+        </ListItemIcon>
+        <ListItemText primary="Add Trip" />
+      </ListItem>
       {/* Modal Form */}
       <Modal
         className={classes.Modal}

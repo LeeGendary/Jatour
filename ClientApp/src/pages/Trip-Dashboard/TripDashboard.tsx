@@ -10,24 +10,17 @@ export default observer(function TripDashboard() {
   const { tripStore } = useStore();
   const { tripsByDate } = tripStore;
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={4} md={2}>
-        <LeftBar />
-      </Grid>
-      <Grid item xs={8} md={10}>
-        <Container
-          sx={{
-            display: "grid",
-            gap: 2,
-            gridTemplateColumns: "repeat(3, 1fr)",
-            pt: 4,
-          }}
-        >
-          {tripsByDate.map((tripItem) => (
-            <TripCard key={tripItem.id} trip={tripItem} />
-          ))}
-        </Container>
-      </Grid>
-    </Grid>
+    <Container
+      sx={{
+        display: "grid",
+        gap: 2,
+        gridTemplateColumns: "repeat(3, 1fr)",
+        pt: 4,
+      }}
+    >
+      {tripsByDate.map((tripItem) => (
+        <TripCard key={tripItem.id} trip={tripItem} />
+      ))}
+    </Container>
   );
 });

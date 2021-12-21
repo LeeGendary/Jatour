@@ -1,77 +1,113 @@
-﻿import { Home } from "@mui/icons-material";
+﻿import { Add, Home, Logout, Person, Settings } from "@mui/icons-material";
 import {
+  CSSObject,
+  Drawer,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  ListItemButton,
+  Theme,
 } from "@mui/material";
-import { Container, Typography, AvatarGroup, Avatar } from "@mui/material";
-import { deepOrange, deepPurple } from "@mui/material/colors";
-import { makeStyles } from "@mui/styles";
 import ChatIcon from "@mui/icons-material/Chat";
-import React from "react";
+import React, { useState } from "react";
+import { styled, useTheme } from "@mui/material/styles";
+import { observer } from "mobx-react-lite";
+import { useStore } from "../../stores/store";
+import { makeStyles } from "@mui/styles";
 import TripFormModal from "../../components/TripForm/TripForm";
-
-const useStyles = makeStyles({
-  container: {
-    alignItems: "center",
-    background:
-      "linear-gradient(-59deg, rgb(152, 175, 189), rgb(33, 183, 213)) !important",
-    height: "100vh",
-    position: "sticky",
-    color: "white",
-    border: "1px solid rgb(33, 183, 213)",
-    borderTop: "none",
-    boxShadow:
-      "0 16px 24px 2px rgb(0 0 0 / 14%), 0 6px 30px 5px rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%)",
-  },
-  item: {
-    display: "flex",
-    alignItems: "center",
-    marginBottom: 3,
+const drawerWidth = 240;
+const openedMixin = (theme: Theme): CSSObject => ({
+  width: drawerWidth,
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: "hidden",
+});
+const closedMixin = (theme: Theme): CSSObject => ({
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: "hidden",
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up("sm")]: {
+    width: `calc(${theme.spacing(9)} + 1px)`,
   },
 });
 
-export default function LeftBar() {
+const LeftBarContainer = styled(Drawer, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  overflowX: "hidden",
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  flexShrink: 0,
+  whiteSpace: "nowrap",
+  boxSizing: "border-box",
+  background: "linear-gradient(-59deg, rgb(152, 175, 189), rgb(33, 183, 213))",
+  ...(open && {
+    ...openedMixin(theme),
+    "& .MuiDrawer-paper": openedMixin(theme),
+  }),
+  ...(!open && {
+    ...closedMixin(theme),
+    "& .MuiDrawer-paper": closedMixin(theme),
+  }),
+}));
+
+//Style
+const useStyles = makeStyles({
+  bg: {
+    background:
+      "linear-gradient(-59deg, rgb(152, 175, 189), rgb(33, 183, 213)) !important",
+    color: "white",
+  },
+});
+export default observer(function LeftBar() {
+  const { themeStore } = useStore();
   const classes = useStyles();
+  const menuItems = [
+    {
+      text: "Home",
+      icon: <Home />,
+      path: "/",
+    },
+    {
+      text: "Messages",
+      icon: <ChatIcon />,
+      path: "/",
+    },
+    {
+      text: "Friends",
+      icon: <Person />,
+      path: "/",
+    },
+    {
+      text: "Setting",
+      icon: <Settings />,
+      path: "/",
+    },
+    {
+      text: "Logout",
+      icon: <Logout />,
+      path: "/",
+    },
+  ];
   return (
-    <Container
-      className={classes.container}
-      sx={{ pt: 4, justifyContent: "center" }}
+    <LeftBarContainer
+      variant="permanent"
+      open={themeStore.drawerState}
+      classes={{ paper: classes.bg }}
     >
-      <TripFormModal />
-      <Typography variant="h6" gutterBottom>
-        Members
-      </Typography>
-      <AvatarGroup max={5}>
-        <Avatar alt="Remy Sharp" src="https://bit.ly/3GK7f8a" />
-        <Avatar sx={{ bgcolor: deepOrange[500] }}>N</Avatar>
-        <Avatar alt="Alba Sharp" src="https://bit.ly/30tqgMt" />
-        <Avatar alt="Chris Sharp" src="https://bit.ly/3m3jg0A" />
-        <Avatar sx={{ bgcolor: deepPurple[500] }}>OP</Avatar>
-        <Avatar alt="John Sharp" src="https://bit.ly/30tqgMt" />
-        <Avatar>H</Avatar>
-        <Avatar></Avatar>
-      </AvatarGroup>
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <Home sx={{ mr: 1, color: "white" }} />
-            </ListItemIcon>
-            <ListItemText primary="Home" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <ChatIcon sx={{ mr: 1, color: "white" }} />
-            </ListItemIcon>
-            <ListItemText primary="Chat" />
-          </ListItemButton>
-        </ListItem>
+      <List sx={{ mt: 10 }}>
+        <TripFormModal />
+        {menuItems.map((item) => (
+          <ListItem button key={item.text}>
+            <ListItemIcon sx={{ color: "white" }}>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.text} />
+          </ListItem>
+        ))}
       </List>
-    </Container>
+    </LeftBarContainer>
   );
-}
+});
