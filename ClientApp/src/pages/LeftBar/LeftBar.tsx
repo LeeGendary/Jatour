@@ -1,4 +1,11 @@
-﻿import { Home, Logout, Person, Settings } from "@mui/icons-material";
+﻿import {
+  Add,
+  AddAPhoto,
+  Home,
+  Logout,
+  Person,
+  Settings,
+} from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import {
   CSSObject,
@@ -10,12 +17,12 @@ import {
   Theme,
 } from "@mui/material";
 import ChatIcon from "@mui/icons-material/Chat";
-import React, { useState } from "react";
-import { styled, useTheme } from "@mui/material/styles";
+import React from "react";
+import { styled } from "@mui/material/styles";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/store";
 import { makeStyles } from "@mui/styles";
-import TripFormModal from "../../components/TripForm/TripForm";
+import CreateEditTrip from "../../components/Form/CreateEditTrip";
 const drawerWidth = 240;
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -65,7 +72,7 @@ const useStyles = makeStyles({
   },
 });
 export default observer(function LeftBar() {
-  const { themeStore } = useStore();
+  const { themeStore, modalStore } = useStore();
   const classes = useStyles();
   const menuItems = [
     {
@@ -101,7 +108,16 @@ export default observer(function LeftBar() {
       classes={{ paper: classes.bg }}
     >
       <List sx={{ mt: 10 }}>
-        <TripFormModal />
+        <ListItem
+          button
+          onClick={() => modalStore.openModal(<CreateEditTrip />)}
+          key="add Trip"
+        >
+          <ListItemIcon sx={{ color: "white" }}>
+            <Add />
+          </ListItemIcon>
+          <ListItemText primary="Add Trip" />
+        </ListItem>
         {menuItems.map((item) => (
           <ListItem button component={Link} key={item.text} to={item.path}>
             <ListItemIcon sx={{ color: "white" }}>{item.icon}</ListItemIcon>

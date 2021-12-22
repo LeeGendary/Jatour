@@ -15,20 +15,25 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "./stores/store";
 import LoadingPage from "./pages/LoadingPage/Loding";
 import SignInSide from "./components/Form/LoginForm";
-import { Switch } from "react-router-dom";
+import ModalContainer from "./components/Modals/ModalContainer";
+import SnackBarContainer from "./components/snackbar/snackbarContainer";
 
 export default observer(function App() {
-  const { tripStore } = useStore();
+  const { commonStore, userStore } = useStore();
 
   useEffect(() => {
-    tripStore.loadTrips();
-  }, [tripStore]);
+    if (commonStore.token) {
+      userStore.getuser().finally(() => commonStore.setAppLoaded());
+    } else {
+      commonStore.setAppLoaded();
+    }
+  }, [commonStore, userStore]);
 
   const [mode, setMode] = useState<string | "light">("light");
 
   const theme = createTheme({
     palette: {
-      mode,
+      mode: mode,
     },
   });
 
@@ -36,31 +41,32 @@ export default observer(function App() {
     setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
   }
 
-  if (tripStore.loadingInitial)
+  if (!commonStore.apploaded)
     return (
-      <LoadingPage
-        loading={tripStore.loadingInitial}
-        content="Loading content.."
-      />
+      <LoadingPage loading={commonStore.apploaded} content="Loading app.." />
     );
   return (
-    <ThemeProvider theme={theme}>
-      <Route exact path="/" component={SignInSide} />
-      <Route
-        path={"/(.+)"}
-        render={() => (
-          <Box sx={{ display: "flex" }}>
-            <Header handleThemeChange={handleThemeChange} />
-            <LeftBar />
-            <Box component="main" sx={{ flexGrow: 1, mt: 10 }}>
-              <Route exact path="/home" component={Layout} />
-              <Route path="/details/:id" component={tripDetails} />
-              <Route path="/profile" component={profilePage} />
-              <Route path="/setting" component={settingPage} />
+    <>
+      <ThemeProvider theme={theme}>
+        <ModalContainer />
+        <SnackBarContainer />
+        <Route exact path="/" component={SignInSide} />
+        <Route
+          path={"/(.+)"}
+          render={() => (
+            <Box sx={{ display: "flex" }}>
+              <Header handleThemeChange={handleThemeChange} />
+              <LeftBar />
+              <Box component="main" sx={{ flexGrow: 1, mt: 10 }}>
+                <Route exact path="/home" component={Layout} />
+                <Route path="/details/:id" component={tripDetails} />
+                <Route path="/profile" component={profilePage} />
+                <Route path="/setting" component={settingPage} />
+              </Box>
             </Box>
-          </Box>
-        )}
-      />
-    </ThemeProvider>
+          )}
+        />
+      </ThemeProvider>
+    </>
   );
 });

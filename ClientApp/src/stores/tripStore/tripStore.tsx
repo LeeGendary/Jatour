@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../../api/agent";
 import { Trip } from "../../Models/trip";
 import { v4 as uuidv4 } from "uuid";
+import { store } from "../store";
 
 export default class TripStore {
   trips: Trip[] = [];
@@ -75,6 +76,7 @@ export default class TripStore {
   closeModalForm = () => {
     this.editMode = false;
     this.cancelSelectTrip();
+    store.modalStore.closeModal();
   };
 
   /*

@@ -53,7 +53,7 @@ namespace JaTour.Controllers
                 IsHost = true
             };
 
-            trip.Attendees.Add(attendee);
+            // trip.Attendees.Add(attendee);
             _context.Trips.Add(trip);
             await _context.SaveChangesAsync();
             return Ok();

@@ -7,9 +7,10 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import { createTheme } from "@mui/material/styles";
 import React from "react";
 import { Avatar, Button, CssBaseline } from "@mui/material";
+import { useStore } from "../../stores/store";
+import { observer } from "mobx-react-lite";
 
 function Copyright(props: any) {
   return (
@@ -20,8 +21,8 @@ function Copyright(props: any) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="https://github.com/bahkali">
+        my github
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -29,16 +30,24 @@ function Copyright(props: any) {
   );
 }
 
-const theme = createTheme();
+export default observer(function SignInSide() {
+  const { userStore } = useStore();
 
-export default function SignInSide() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+
+    const values = {
+      email: "",
+      password: "",
+    };
+    values.email = data.get("email");
+    values.password = data.get("password");
+    // console.log(values);
+    userStore.login(values).catch((error) => {
+      // Error message - can send it to toaster
+      console.error("Invalid email or password");
     });
   };
 
@@ -61,7 +70,20 @@ export default function SignInSide() {
           backgroundPosition: "center",
         }}
       />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+      <Grid
+        item
+        xs={12}
+        sm={8}
+        md={5}
+        component={Paper}
+        elevation={6}
+        square
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <Box
           sx={{
             my: 8,
@@ -133,4 +155,4 @@ export default function SignInSide() {
       </Grid>
     </Grid>
   );
-}
+});

@@ -1,12 +1,20 @@
 import axios, { AxiosResponse } from "axios";
 import { Trip } from "../Models/trip";
 import { User, UserFormValues } from "../Models/user";
+import { store } from "../stores/store";
 
 const sleep = (delay: number) => {
   return new Promise((resolve) => {
     setTimeout(resolve, delay);
   });
 };
+
+axios.interceptors.request.use((config) => {
+  const token = store.commonStore.token;
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
 // delay request
 axios.interceptors.response.use(async (response) => {
   try {

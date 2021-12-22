@@ -1,4 +1,10 @@
-import { Box, Button, InputAdornment, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 import React, { ChangeEvent, FormEvent, useState } from "react";
@@ -14,13 +20,9 @@ const useStyles = makeStyles({
     marginRight: 20,
   },
 });
-interface Props {
-  handleSnackBarClick: () => void;
-}
-export default observer(function CreateEditTripForm({
-  handleSnackBarClick,
-}: Props) {
-  const { tripStore } = useStore();
+
+export default observer(function CreateEditTripForm() {
+  const { tripStore, modalStore, snackbarStore } = useStore();
   const classes = useStyles();
 
   const { selectedTrip, closeModalForm, createTrip, updateTrip } = tripStore;
@@ -52,11 +54,23 @@ export default observer(function CreateEditTripForm({
   function handelSubmit(event: FormEvent) {
     event.preventDefault();
     trip.id ? updateTrip(trip as Trip) : createTrip(trip as Trip);
-    handleSnackBarClick();
+    modalStore.closeModal();
+    snackbarStore.openSnackBar(<h2>Trip created</h2>);
   }
 
   return (
     <>
+      <Typography
+        variant="h4"
+        component="h4"
+        gutterBottom
+        sx={{ m: 2, textAlign: "center" }}
+      >
+        Add Trip{" "}
+        <span aria-label="img" role="img">
+          😉
+        </span>
+      </Typography>
       <form onSubmit={handelSubmit} className={classes.form} autoComplete="off">
         {/* title */}
         <div className={classes.formItem}>

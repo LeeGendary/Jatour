@@ -21,7 +21,7 @@ import { NavLink } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { useState } from "react";
 import { Dehaze } from "@mui/icons-material";
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import MuiAppBar from "@mui/material/AppBar";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/store";
 
@@ -92,16 +92,16 @@ interface Props {
   handleThemeChange: () => void;
 }
 // dropdown menu
-const dropdownMenu = [
-  { title: "Profile", path: "/profile" },
-  { title: "Setting", path: "/setting" },
-  { title: "Logout", path: "/home" },
-];
+const dropdownMenu = [{ title: "Setting", path: "/setting" }];
 
 export default observer(function Header({ handleThemeChange }: Props) {
   const theme = useTheme();
   const classes = useStyles();
-  const { themeStore } = useStore();
+  const {
+    themeStore,
+    userStore: { user, logout },
+  } = useStore();
+
   const { setdrawerState } = themeStore;
   const handleDrawerOpen = () => {
     setdrawerState(true);
@@ -178,6 +178,7 @@ export default observer(function Header({ handleThemeChange }: Props) {
               <Brightness4Icon />
             )}
           </IconButton>
+
           <IconButton
             size="large"
             aria-label="show 4 new mails"
@@ -199,7 +200,8 @@ export default observer(function Header({ handleThemeChange }: Props) {
           <IconButton size="medium" onClick={handleOpenUserMenu}>
             <Avatar
               alt="Remy Sharp"
-              src="https://bahkali.github.io/img/profile.jpg"
+              src={user?.image || ""}
+              // src="https://bahkali.github.io/img/profile.jpg"
             />
           </IconButton>
           <Menu
@@ -218,11 +220,21 @@ export default observer(function Header({ handleThemeChange }: Props) {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
+            <MenuItem
+              component={NavLink}
+              key={`/profile/${user?.username}`}
+              to={`/profile/${user?.username}`}
+            >
+              <Typography textAlign="center">Profile</Typography>
+            </MenuItem>
             {dropdownMenu.map(({ title, path }) => (
               <MenuItem component={NavLink} key={path} to={path}>
                 <Typography textAlign="center">{title}</Typography>
               </MenuItem>
             ))}
+            <MenuItem key={`/logout`} onClick={logout}>
+              <Typography textAlign="center">Logout</Typography>
+            </MenuItem>
           </Menu>
         </Box>
       </Toolbar>

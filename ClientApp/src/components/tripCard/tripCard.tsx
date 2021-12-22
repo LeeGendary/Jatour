@@ -8,17 +8,14 @@ import Typography from "@mui/material/Typography";
 import { Trip } from "../../Models/trip";
 import { useStore } from "../../stores/store";
 import { Link } from "react-router-dom";
-import { Avatar, CardHeader, Divider, IconButton } from "@mui/material";
+import { Divider, IconButton } from "@mui/material";
 import {
   AccessTime,
   Delete,
   Favorite,
   LocationOn,
-  MoreVert,
-  Share,
   Star,
 } from "@mui/icons-material";
-import { red } from "@mui/material/colors";
 import { Box } from "@mui/system";
 
 interface Props {
