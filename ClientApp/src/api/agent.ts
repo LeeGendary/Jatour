@@ -3,6 +3,7 @@ import { Trip } from "../Models/trip";
 import { User, UserFormValues } from "../Models/user";
 import { store } from "../stores/store";
 import { toast } from "react-toastify";
+import { history } from "..";
 
 const sleep = (delay: number) => {
   return new Promise((resolve) => {
@@ -26,6 +27,15 @@ axios.interceptors.response.use(
     const { data, status } = error.response!;
     switch (status) {
       case 400:
+        if (data.errors) {
+          const modelStateErrors: string[] = [];
+          for (const key in data.errors) {
+            if (data.errors[key]) {
+              modelStateErrors.push(data.errors[key]);
+            }
+          }
+          throw modelStateErrors.flat();
+        }
         toast.error(data.title);
         break;
       case 401:
@@ -35,7 +45,10 @@ axios.interceptors.response.use(
         toast.error(data.title);
         break;
       case 500:
-        toast.error(data.title);
+        history.push({
+          pathname: "/server-error",
+          state: { error: data },
+        });
         break;
     }
     console.log("caught by interceptor");

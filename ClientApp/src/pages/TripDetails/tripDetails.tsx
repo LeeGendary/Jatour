@@ -1,10 +1,11 @@
-import { Grid, Paper, Typography } from "@mui/material";
+import { Button, Grid, Paper, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import { useStore } from "../../stores/store";
 import MapContainer from "../../components/Map/mapContainer";
+import { useHistory, useLocation } from "react-router-dom";
 
 //Style
 const useStyles = makeStyles({
@@ -21,6 +22,7 @@ const useStyles = makeStyles({
 });
 
 export default observer(function TripDetails() {
+  const history = useHistory();
   const { tripStore } = useStore();
   const { selectedTrip: trip, loadTrip } = tripStore;
   const { id } = useParams<{ id: string }>();
@@ -47,7 +49,8 @@ export default observer(function TripDetails() {
                 fontSize: "2.25rem",
                 fontWeight: 700,
                 textTransform: "uppercase",
-                backgroundImage: "linear-gradient(to right, #7dd56f, #28b487)",
+                backgroundImage:
+                  "linear-gradient( to bottom right, rgba(125, 213, 111, 0.85), rgba(40, 180, 135, 0.85) )",
                 color: "transparent",
                 lineHeight: 1.3,
                 backgroundClip: "text",
@@ -56,7 +59,21 @@ export default observer(function TripDetails() {
             >
               {trip?.title}
             </Typography>
-            <Typography variant="body1">{trip?.description}</Typography>
+            <Typography gutterBottom variant="body1">
+              {trip?.description}
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Duis aute irure dolor in reprehenderit in
+              voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+              officia deserunt mollit anim id est laborum!
+            </Typography>
+            <Button variant="outlined" onClick={() => history.push("/home")}>
+              Go back to homepage
+            </Button>
           </Paper>
         </Grid>
       </Grid>
@@ -80,7 +97,7 @@ export default observer(function TripDetails() {
               backgroundClip: "text",
             }}
           >
-            {trip?.title}
+            Quick Facts
           </Typography>
           <Typography variant="body1">{trip?.description}</Typography>
         </Grid>

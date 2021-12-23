@@ -18,6 +18,7 @@ import ModalContainer from "./components/Modals/ModalContainer";
 import LoginRegisterPage from "./pages/LoginRegisterPage/LoginRegisterPage";
 import Home from "./pages/HomePage/Home";
 import "react-toastify/dist/ReactToastify.css";
+import ServerError from "./errors/ServerError";
 
 export default observer(function App() {
   const { commonStore, userStore } = useStore();
@@ -70,6 +71,7 @@ export default observer(function App() {
                 <Route path="/testing" component={Home} />
                 <Route path="/profile" component={profilePage} />
                 <Route path="/setting" component={settingPage} />
+                <Route path="/server-error" component={ServerError} />
               </Box>
             </Box>
           )}
