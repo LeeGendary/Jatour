@@ -12,9 +12,7 @@ using System.Threading.Tasks;
 
 namespace JaTour.Controllers
 {
-    [Route("[controller]")]
-    [ApiController]
-    public class TripsController : ControllerBase
+    public class TripsController : BaseApiController
     {
         private readonly DataContext _context;
         private readonly IUserAccessor _usserAccessor;
