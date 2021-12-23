@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { Trip } from "../Models/trip";
 import { User, UserFormValues } from "../Models/user";
 import { store } from "../stores/store";
+import { toast } from "react-toastify";
 
 const sleep = (delay: number) => {
   return new Promise((resolve) => {
@@ -11,7 +12,7 @@ const sleep = (delay: number) => {
 
 axios.interceptors.request.use((config) => {
   const token = store.commonStore.token;
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  if (token) config.headers!.Authorization = `Bearer ${token}`;
   return config;
 });
 
@@ -22,6 +23,21 @@ axios.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
+    const { data, status } = error.response!;
+    switch (status) {
+      case 400:
+        toast.error(data.title);
+        break;
+      case 401:
+        toast.error(data.title);
+        break;
+      case 404:
+        toast.error(data.title);
+        break;
+      case 500:
+        toast.error(data.title);
+        break;
+    }
     console.log("caught by interceptor");
     return await Promise.reject(error.response);
   }

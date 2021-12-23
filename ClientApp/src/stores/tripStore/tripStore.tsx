@@ -3,7 +3,7 @@ import agent from "../../api/agent";
 import { Trip } from "../../Models/trip";
 import { v4 as uuidv4 } from "uuid";
 import { store } from "../store";
-
+import { toast } from "react-toastify";
 export default class TripStore {
   trips: Trip[] = [];
   tripRegistry = new Map<string, Trip>();
@@ -98,9 +98,19 @@ export default class TripStore {
           this.editMode = false;
           this.loading = false;
         });
+        toast.success("Trip Added", {
+          icon: "🚀",
+          position: "bottom-left",
+          theme: "colored",
+        });
       })
       .catch((error) => {
         console.log(error.response);
+        toast.error(`Fail to add trip - ${error.response.data.title}`, {
+          icon: "😔",
+          position: "bottom-left",
+          theme: "colored",
+        });
       })
       .finally(() => {
         runInAction(() => {
@@ -120,9 +130,19 @@ export default class TripStore {
           this.editMode = false;
           this.loading = false;
         });
+        toast.success("Trip Updated", {
+          icon: "🚀",
+          position: "bottom-left",
+          theme: "colored",
+        });
       })
       .catch((error) => {
         console.log(error);
+        toast.error(`Fail to Update trip - ${error.response.data.title}`, {
+          icon: "😔",
+          position: "bottom-left",
+          theme: "colored",
+        });
       })
       .finally(() => {
         runInAction(() => {
@@ -142,9 +162,19 @@ export default class TripStore {
           if (this.selectedTrip?.id === id) this.cancelSelectTrip();
           this.loading = false;
         });
+        toast.success("Trip Deleted", {
+          icon: "🚀",
+          position: "bottom-left",
+          theme: "colored",
+        });
       })
       .catch((error) => {
         console.log(error);
+        toast.error(`Fail to delete trip - ${error.response.data.title}`, {
+          icon: "😔",
+          position: "bottom-left",
+          theme: "colored",
+        });
       })
       .finally(() => {
         runInAction(() => {

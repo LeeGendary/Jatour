@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Route } from "react-router";
-// import Home from "./pages/HomePage/Home";
+import { ToastContainer } from "react-toastify";
 import Header from "./components/header/Header";
 
 import CssBaseline from "@mui/material/CssBaseline";
@@ -15,9 +15,9 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "./stores/store";
 import LoadingPage from "./pages/LoadingPage/Loding";
 import ModalContainer from "./components/Modals/ModalContainer";
-import SnackBarContainer from "./components/snackbar/snackbarContainer";
 import LoginRegisterPage from "./pages/LoginRegisterPage/LoginRegisterPage";
 import Home from "./pages/HomePage/Home";
+import "react-toastify/dist/ReactToastify.css";
 
 export default observer(function App() {
   const { commonStore, userStore } = useStore();
@@ -51,7 +51,12 @@ export default observer(function App() {
       <CssBaseline />
       <ThemeProvider theme={theme}>
         <ModalContainer />
-        <SnackBarContainer />
+        <ToastContainer
+          position="bottom-right"
+          autoClose={3000}
+          theme="colored"
+          hideProgressBar
+        />
         <Route exact path="/" component={LoginRegisterPage} />
         <Route
           path={"/(.+)"}
