@@ -70,8 +70,8 @@ export default function LoginRegisterPage() {
           }}
         >
           {/* Insert Form Here */}
-          {/* <LoginForm /> */}
-          <RegisterForm />
+          <LoginForm />
+          {/* <RegisterForm /> */}
           <Copyright sx={{ mt: 5 }} />
         </Box>
       </Grid>

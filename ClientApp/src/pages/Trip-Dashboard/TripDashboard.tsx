@@ -17,9 +17,19 @@ export default observer(function TripDashboard() {
       <LoadingPage loading={tripStore.loading} content="Loading Trips.." />
     );
   return (
-    <Grid container spacing={4}>
+    <Grid
+      container
+      spacing={2}
+      sx={{
+        gridTemplateColumns: "repeat(auto-fit, minmax(650, 1fr))",
+      }}
+      // xs={12}
+      // sm={12}
+      // md={6}
+      // lg={4}
+    >
       {tripsByDate.map((tripItem) => (
-        <Grid item xs={12} sm={12} md={6} lg={4} key={tripItem.id}>
+        <Grid item key={tripItem.id}>
           <TripCard key={tripItem.id} trip={tripItem} />
         </Grid>
       ))}

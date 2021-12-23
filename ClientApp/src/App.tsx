@@ -58,7 +58,7 @@ export default observer(function App() {
             <Box sx={{ display: "flex" }}>
               <Header handleThemeChange={handleThemeChange} />
               <LeftBar />
-              <Box component="main" sx={{ flexGrow: 1, mt: 10 }}>
+              <Box component="main" sx={{ flexGrow: 1 }}>
                 <Route exact path="/home" component={Layout} />
                 <Route path="/details/:id" component={tripDetails} />
                 <Route path="/profile" component={profilePage} />

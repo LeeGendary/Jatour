@@ -19,7 +19,6 @@ const useStyles = makeStyles({
   calendar: {
     background: "white",
     boxShadow: "0 3px 10px rgb(0 0 0 / 0.2)",
-    // border: "1px solid rgb(229, 232, 236)",
     borderRadius: "10px",
     overflow: "hidden",
     marginBottom: 10,
@@ -35,31 +34,36 @@ export default function Layout() {
   const [date, setDate] = useState<Date | null>(new Date());
 
   return (
-    <Grid container spacing={1}>
+    <Grid container spacing={2} sx={{ mt: 10, justifyContent: "center" }}>
       {/* Left Bar */}
-      <Grid item xs={12} sm={4} md={2}>
+      <Grid item sm={2} md={2} sx={{ backgroundColor: "white", m: 2 }}>
         <Paper sx={{ m: 2, p: 2 }} elevation={3}>
           <Typography variant="h5">Members</Typography>
           <AvatarGroup max={4}>
             <Avatar
               alt="Remy Sharp"
               src="https://mui.com/static/images/avatar/1.jpg"
+              key="Remy Sharp"
             />
             <Avatar
               alt="Travis Howard"
               src="https://mui.com/static/images/avatar/2.jpg"
+              key="Travis Howard"
             />
             <Avatar
               alt="Cindy Baker"
               src="https://mui.com/static/images/avatar/3.jpg"
+              key="Cindy Baker"
             />
             <Avatar
               alt="Agnes Walker"
               src="https://mui.com/static/images/avatar/4.jpg"
+              key="Agnes Walker"
             />
             <Avatar
               alt="Trevor Henderson"
               src="https://mui.com/static/images/avatar/5.jpg"
+              key="Trevor Henderson"
             />
           </AvatarGroup>
         </Paper>
@@ -71,6 +75,7 @@ export default function Layout() {
                   value={items.value}
                   control={<Radio />}
                   label={items.label}
+                  key={items.label}
                 />
               ))}
             </RadioGroup>
@@ -85,7 +90,7 @@ export default function Layout() {
         </LocalizationProvider>
       </Grid>
       {/* Content */}
-      <Grid item xs={12} sm={8} md={10}>
+      <Grid item xs={12} sm={9} md={9}>
         <TripDashboard />
       </Grid>
     </Grid>

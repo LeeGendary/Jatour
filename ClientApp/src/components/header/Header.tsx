@@ -200,9 +200,16 @@ export default observer(function Header({ handleThemeChange }: Props) {
           <IconButton size="medium" onClick={handleOpenUserMenu}>
             <Avatar
               alt="Remy Sharp"
-              src={user?.image || ""}
+              src={user?.image || "https://bahkali.github.io/img/profile.jpg"}
               // src="https://bahkali.github.io/img/profile.jpg"
             />
+            {user?.username ? (
+              <Typography variant="body1" sx={{ ml: 1, color: "white" }}>
+                Hi! {user?.username}
+              </Typography>
+            ) : (
+              " "
+            )}
           </IconButton>
           <Menu
             sx={{ mt: "45px" }}

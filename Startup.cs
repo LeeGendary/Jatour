@@ -33,13 +33,12 @@ namespace JaTour
             {
                 configuration.RootPath = "ClientApp/build";
             });
-
+            services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddDbContext<DataContext>(opt =>
             {
                 opt.UseSqlite(_config.GetConnectionString("DefaultConnection"));
             });
             services.AddCors();
-            services.AddScoped<IUserAccessor, UserAccessor>();
 
             services.AddIdentityServices(_config);
         }
