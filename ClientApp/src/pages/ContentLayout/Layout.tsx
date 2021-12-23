@@ -38,13 +38,6 @@ export default function Layout() {
     <Grid container spacing={1}>
       {/* Left Bar */}
       <Grid item xs={12} sm={4} md={2}>
-        <LocalizationProvider dateAdapter={DateAdapter}>
-          <CalendarPicker
-            date={date}
-            onChange={(newDate) => setDate(newDate)}
-            className={classes.calendar}
-          />
-        </LocalizationProvider>
         <Paper sx={{ m: 2, p: 2 }} elevation={3}>
           <Typography variant="h5">Members</Typography>
           <AvatarGroup max={4}>
@@ -83,6 +76,13 @@ export default function Layout() {
             </RadioGroup>
           </FormControl>
         </Paper>
+        <LocalizationProvider dateAdapter={DateAdapter}>
+          <CalendarPicker
+            date={date}
+            onChange={(newDate) => setDate(newDate)}
+            className={classes.calendar}
+          />
+        </LocalizationProvider>
       </Grid>
       {/* Content */}
       <Grid item xs={12} sm={8} md={10}>

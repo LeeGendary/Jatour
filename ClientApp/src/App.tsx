@@ -4,7 +4,7 @@ import { Route } from "react-router";
 // import Home from "./pages/HomePage/Home";
 import Header from "./components/header/Header";
 
-import "./custom.css";
+import CssBaseline from "@mui/material/CssBaseline";
 import tripDetails from "./pages/TripDetails/tripDetails";
 import settingPage from "./pages/SettingPage/settingPage";
 import profilePage from "./pages/profilePage/profilePage";
@@ -14,9 +14,9 @@ import { Box } from "@mui/system";
 import { observer } from "mobx-react-lite";
 import { useStore } from "./stores/store";
 import LoadingPage from "./pages/LoadingPage/Loding";
-import SignInSide from "./components/Form/LoginForm";
 import ModalContainer from "./components/Modals/ModalContainer";
 import SnackBarContainer from "./components/snackbar/snackbarContainer";
+import LoginRegisterPage from "./pages/LoginRegisterPage/LoginRegisterPage";
 
 export default observer(function App() {
   const { commonStore, userStore } = useStore();
@@ -47,10 +47,11 @@ export default observer(function App() {
     );
   return (
     <>
+      <CssBaseline />
       <ThemeProvider theme={theme}>
         <ModalContainer />
         <SnackBarContainer />
-        <Route exact path="/" component={SignInSide} />
+        <Route exact path="/" component={LoginRegisterPage} />
         <Route
           path={"/(.+)"}
           render={() => (

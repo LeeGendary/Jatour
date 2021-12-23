@@ -1,11 +1,4 @@
-﻿import {
-  Add,
-  AddAPhoto,
-  Home,
-  Logout,
-  Person,
-  Settings,
-} from "@mui/icons-material";
+﻿import { Add, Home, Logout, Person, Settings } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import {
   CSSObject,
