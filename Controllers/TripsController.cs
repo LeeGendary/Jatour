@@ -34,7 +34,9 @@ namespace JaTour.Controllers
         [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Trip>> GetTrip(Guid id) {
-            return await _context.Trips.FindAsync(id);
+            var trip =  await _context.Trips.FindAsync(id);
+            if( trip == null) return NotFound();
+            return trip;
         }
 
         // create trip

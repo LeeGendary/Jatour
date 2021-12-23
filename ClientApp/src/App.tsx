@@ -17,6 +17,7 @@ import LoadingPage from "./pages/LoadingPage/Loding";
 import ModalContainer from "./components/Modals/ModalContainer";
 import SnackBarContainer from "./components/snackbar/snackbarContainer";
 import LoginRegisterPage from "./pages/LoginRegisterPage/LoginRegisterPage";
+import Home from "./pages/HomePage/Home";
 
 export default observer(function App() {
   const { commonStore, userStore } = useStore();
@@ -61,6 +62,7 @@ export default observer(function App() {
               <Box component="main" sx={{ flexGrow: 1 }}>
                 <Route exact path="/home" component={Layout} />
                 <Route path="/details/:id" component={tripDetails} />
+                <Route path="/testing" component={Home} />
                 <Route path="/profile" component={profilePage} />
                 <Route path="/setting" component={settingPage} />
               </Box>

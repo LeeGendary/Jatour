@@ -6,7 +6,6 @@ import Typography from "@mui/material/Typography";
 import React from "react";
 import { CssBaseline } from "@mui/material";
 import LoginForm from "../../components/Form/LoginForm";
-import RegisterForm from "../../components/Form/RegisterForm";
 
 function Copyright(props: any) {
   return (

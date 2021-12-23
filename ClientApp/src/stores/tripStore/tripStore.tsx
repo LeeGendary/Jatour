@@ -27,16 +27,17 @@ export default class TripStore {
   // Action Loading trips
   loadTrips = async () => {
     this.setLoadingInitial(true);
-    try {
-      const tripsload = await agent.Trips.list();
-      tripsload.forEach((trip) => {
-        this.setTrip(trip);
-      });
-      this.setLoadingInitial(false);
-    } catch (error) {
-      console.log(error);
-      this.setLoadingInitial(false);
-    }
+    await agent.Trips.list()
+      .then((response) => {
+        response.forEach((trip) => {
+          this.setTrip(trip);
+        });
+        this.setLoadingInitial(false);
+      })
+      .catch((error) => {
+        console.log(error.response);
+      })
+      .finally(() => this.setLoadingInitial(false));
   };
 
   loadTrip = async (id: string) => {
@@ -45,15 +46,16 @@ export default class TripStore {
       this.selectedTrip = trip;
     } else {
       this.setLoadingInitial(true);
-      try {
-        trip = await agent.Trips.details(id);
-        this.setTrip(trip);
-        this.selectedTrip = trip;
-        this.setLoadingInitial(false);
-      } catch (error) {
-        console.log(error);
-        this.setLoadingInitial(false);
-      }
+      await agent.Trips.details(id)
+        .then((response) => {
+          this.setTrip(response);
+          this.selectedTrip = response;
+          this.setLoadingInitial(false);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        })
+        .finally(() => this.setLoadingInitial(false));
     }
   };
   // Action for Loading page
@@ -61,7 +63,7 @@ export default class TripStore {
     this.loadingInitial = state;
   };
   selectTrip = (id: string) => {
-    // this.selectedTrip = this.trips.find((x) => x.id === id);
+    this.selectedTrip = this.trips.find((x) => x.id === id);
     this.selectedTrip = this.tripRegistry.get(id);
   };
 
@@ -88,59 +90,67 @@ export default class TripStore {
     trip.id = uuidv4();
     trip.startDate = new Date(trip.startDate!);
     trip.endDate = new Date(trip.endDate!);
-    try {
-      await agent.Trips.create(trip as Trip);
-
-      runInAction(() => {
-        // this.trips.push(trip);
-        this.tripRegistry.set(trip.id, trip);
-        this.editMode = false;
-        this.loading = false;
+    await agent.Trips.create(trip as Trip)
+      .then((res) => {
+        runInAction(() => {
+          // this.trips.push(trip);
+          this.tripRegistry.set(trip.id, trip);
+          this.editMode = false;
+          this.loading = false;
+        });
+      })
+      .catch((error) => {
+        console.log(error.response);
+      })
+      .finally(() => {
+        runInAction(() => {
+          this.loading = false;
+        });
       });
-    } catch (error) {
-      console.log(error);
-      runInAction(() => {
-        this.loading = false;
-      });
-    }
   };
 
   // Update Trip
   updateTrip = async (trip: Trip) => {
     this.loading = true;
-    try {
-      await agent.Trips.update(trip as Trip);
-      runInAction(() => {
-        // this.trips = [...this.trips.filter((a) => a.id !== trip.id), trip];
-        this.tripRegistry.set(trip.id, trip);
-        this.editMode = false;
-        this.loading = false;
+    await agent.Trips.update(trip as Trip)
+      .then((res) => {
+        runInAction(() => {
+          this.trips = [...this.trips.filter((a) => a.id !== trip.id), trip];
+          this.tripRegistry.set(trip.id, trip);
+          this.editMode = false;
+          this.loading = false;
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        runInAction(() => {
+          this.loading = false;
+        });
       });
-    } catch (error) {
-      console.log(error);
-      runInAction(() => {
-        this.loading = false;
-      });
-    }
   };
 
   // Delete Trip
   deleteTrip = async (id: string) => {
     this.loading = true;
-    try {
-      await agent.Trips.delete(id);
-      runInAction(() => {
-        // this.trips = [...this.trips.filter((a) => a.id !== id)];
-        this.tripRegistry.delete(id);
-        if (this.selectedTrip?.id === id) this.cancelSelectTrip();
-        this.loading = false;
+    await agent.Trips.delete(id)
+      .then((res) => {
+        runInAction(() => {
+          this.trips = [...this.trips.filter((a) => a.id !== id)];
+          this.tripRegistry.delete(id);
+          if (this.selectedTrip?.id === id) this.cancelSelectTrip();
+          this.loading = false;
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        runInAction(() => {
+          this.loading = false;
+        });
       });
-    } catch (error) {
-      console.log(error);
-      runInAction(() => {
-        this.loading = false;
-      });
-    }
   };
 
   //GET By Date Order

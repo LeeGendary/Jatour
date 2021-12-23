@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { Trip } from "../Models/trip";
 import { User, UserFormValues } from "../Models/user";
 import { store } from "../stores/store";
@@ -16,25 +16,25 @@ axios.interceptors.request.use((config) => {
 });
 
 // delay request
-axios.interceptors.response.use(async (response) => {
-  try {
-    await sleep(1000);
+axios.interceptors.response.use(
+  async (response) => {
+    await sleep(500);
     return response;
-  } catch (error) {
-    console.log(error);
-    return await Promise.reject(error);
+  },
+  async (error: AxiosError) => {
+    console.log("caught by interceptor");
+    return await Promise.reject(error.response);
   }
-});
+);
 
-const responseBody = <T,>(response: AxiosResponse<T>) => response.data;
+const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 const request = {
-  get: <T,>(url: string) => axios.get<T>(url).then(responseBody),
-  post: <T,>(url: string, body: {}) =>
+  get: <T>(url: string) => axios.get<T>(url).then(responseBody),
+  post: <T>(url: string, body: {}) =>
     axios.post<T>(url, body).then(responseBody),
-  put: <T,>(url: string, body: {}) =>
-    axios.put<T>(url, body).then(responseBody),
-  del: <T,>(url: string) => axios.delete<T>(url).then(responseBody),
+  put: <T>(url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
+  del: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 };
 
 const Trips = {
@@ -52,9 +52,18 @@ const Account = {
     request.post<User>("/account/register", user),
 };
 
+const TestErrors = {
+  get400Error: () => request.get("/buggy/bad-request"),
+  get401Error: () => request.get("/buggy/unauthorised"),
+  get404Error: () => request.get("/buggy/not-found"),
+  get500Error: () => request.get("/buggy/server-error"),
+  getValidationError: () => request.get("/buggy/validation-error"),
+};
+
 const agent = {
   Trips,
   Account,
+  TestErrors,
 };
 
 export default agent;

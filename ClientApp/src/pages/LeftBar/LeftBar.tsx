@@ -86,7 +86,7 @@ export default observer(function LeftBar() {
     {
       text: "Setting",
       icon: <Settings />,
-      path: "/home",
+      path: "/testing",
     },
     {
       text: "Logout",
