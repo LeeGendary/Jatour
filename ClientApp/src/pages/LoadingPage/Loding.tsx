@@ -1,4 +1,4 @@
-import { Backdrop, Box, CircularProgress } from "@mui/material";
+import { Backdrop, Box, CircularProgress, Typography } from "@mui/material";
 import React from "react";
 
 interface Props {
@@ -15,8 +15,20 @@ export default function LoadingPage({
       sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
       open={loading}
     >
-      <CircularProgress color="inherit" />
-      <Box sx={{ m: 2 }}>{content}</Box>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress size={100} color="inherit" />
+        <Typography
+          variant="h4"
+          sx={{ justifyContent: "center", position: "fixed", top: "60%", m: 2 }}
+        >
+          {content}
+        </Typography>
+      </Box>
     </Backdrop>
   );
 }

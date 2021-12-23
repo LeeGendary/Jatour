@@ -67,7 +67,7 @@ export default function Home() {
           <AlertTitle>Validaion Errors</AlertTitle>
           <List>
             {validationErrors.map((error) => (
-              <ListItem key={error}>
+              <ListItem key={error.toString()}>
                 <ListItemText>{error}</ListItemText>
               </ListItem>
             ))}
