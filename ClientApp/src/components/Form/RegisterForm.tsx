@@ -4,40 +4,42 @@ import {
   Box,
   Typography,
   Avatar,
-  Button,
   TextField,
   FormControlLabel,
   Checkbox,
-  Link,
+  Alert,
+  AlertTitle,
+  List,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/store";
 import { toast } from "react-toastify";
-import { ChangeEvent, FormEvent, useState } from "react";
 import { UserFormValues } from "../../Models/user";
+import { useForm, FieldValues } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { LoadingButton } from "@mui/lab";
+import { useState } from "react";
 
 export default observer(function RegisterForm() {
   const { userStore } = useStore();
-  const [values, setValues] = useState({
-    username: "",
-    password: "",
-    displayName: "",
-    email: "",
+  const [validationErrors, setValidationErrors] = useState([]);
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors, isValid },
+  } = useForm({
+    mode: "all",
   });
 
-  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target;
-    setValues({ ...values, [name]: value });
-  }
-
-  const handleRegistrationSubmit = (event: FormEvent) => {
-    event.preventDefault();
-    userStore.register(values as UserFormValues).catch((error) => {
+  async function submitRegisterForm(data: FieldValues) {
+    await userStore.register(data as UserFormValues).catch((error) => {
       toast.error("Invalid email or password " + error.response);
+      setValidationErrors(error);
     });
-  };
-
+  }
   return (
     <>
       <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
@@ -46,46 +48,46 @@ export default observer(function RegisterForm() {
       <Typography component="h1" variant="h5">
         Sign up
       </Typography>
-      <Box component="form" onSubmit={handleRegistrationSubmit} sx={{ mt: 3 }}>
+      <Box
+        component="form"
+        onSubmit={handleSubmit(submitRegisterForm)}
+        sx={{ mt: 3 }}
+      >
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <TextField
-              name="username"
               fullWidth
-              onChange={handleInputChange}
-              id="username"
               label="User Name"
               autoFocus
+              {...register("username", { required: "Username is required" })}
+              error={!!errors.username}
+              helperText={errors?.username?.message}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              id="displayName"
               label="display Name"
-              name="displayName"
-              onChange={handleInputChange}
+              {...register("displayName")}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
               fullWidth
-              id="email"
               label="Email Address"
-              name="email"
-              autoComplete="email"
-              onChange={handleInputChange}
+              {...register("email", { required: "Email is required" })}
+              error={!!errors.email}
+              helperText={errors?.email?.message}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
               fullWidth
-              name="password"
               label="Password"
               type="password"
-              id="password"
-              autoComplete="new-password"
-              onChange={handleInputChange}
+              {...register("password", { required: "Password is required" })}
+              error={!!errors.password}
+              helperText={errors?.password?.message}
             />
           </Grid>
           <Grid item xs={12}>
@@ -95,19 +97,31 @@ export default observer(function RegisterForm() {
             />
           </Grid>
         </Grid>
-        <Button
+        {validationErrors.length > 0 && (
+          <Alert severity="error">
+            <AlertTitle>Validaion Errors</AlertTitle>
+            <List>
+              {validationErrors.map((error) => (
+                <ListItem key={error}>
+                  <ListItemText>{error}</ListItemText>
+                </ListItem>
+              ))}
+            </List>
+          </Alert>
+        )}
+        <LoadingButton
+          loading={isSubmitting}
           type="submit"
           fullWidth
+          disabled={!isValid}
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
           Sign Up
-        </Button>
+        </LoadingButton>
         <Grid container justifyContent="flex-end">
           <Grid item>
-            <Link href="#" variant="body2">
-              Already have an account? Sign in
-            </Link>
+            <Link to="/">Already have an account? Sign in</Link>
           </Grid>
         </Grid>
       </Box>

@@ -6,30 +6,29 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import React, { ChangeEvent, FormEvent, useState } from "react";
-import { Avatar, Button } from "@mui/material";
+import React from "react";
+import { Avatar } from "@mui/material";
 import { useStore } from "../../stores/store";
 import { observer } from "mobx-react-lite";
 import { toast } from "react-toastify";
 import { UserFormValues } from "../../Models/user";
+import { useForm, FieldValues } from "react-hook-form";
+import { LoadingButton } from "@mui/lab";
 
 export default observer(function LoginForm() {
   const { userStore } = useStore();
-  const [values, setValues] = useState({
-    email: "",
-    password: "",
-  });
+  // using react hook form to handle form
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm();
 
-  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target;
-    setValues({ ...values, [name]: value });
-  }
-  const handleLoginSubmit = (event: FormEvent) => {
-    event.preventDefault();
-    userStore.login(values as UserFormValues).catch((error) => {
+  async function submitLoginForm(data: FieldValues) {
+    await userStore.login(data as UserFormValues).catch((error) => {
       toast.error("Invalid email or password" + error.response);
     });
-  };
+  }
 
   return (
     <>
@@ -42,41 +41,41 @@ export default observer(function LoginForm() {
       <Box
         component="form"
         noValidate
-        onSubmit={handleLoginSubmit}
+        onSubmit={handleSubmit(submitLoginForm)}
         sx={{ mt: 1 }}
       >
         <TextField
           margin="normal"
           fullWidth
-          id="email"
-          onChange={handleInputChange}
           label="Email Address"
-          name="email"
-          autoComplete="email"
-          autoFocus
+          {...register("email", { required: "Email is required" })}
+          error={!!errors.email}
+          helperText={errors?.email?.message}
         />
         <TextField
           margin="normal"
           fullWidth
-          name="password"
           label="Password"
           type="password"
-          onChange={handleInputChange}
-          id="password"
-          autoComplete="current-password"
+          {...register("password", {
+            required: "Password is required and must be complex",
+          })}
+          error={!!errors.password}
+          helperText={errors?.password?.message}
         />
         <FormControlLabel
           control={<Checkbox value="remember" color="primary" />}
           label="Remember me"
         />
-        <Button
+        <LoadingButton
+          loading={isSubmitting}
           type="submit"
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
           Sign In
-        </Button>
+        </LoadingButton>
         <Grid container>
           <Grid item xs>
             <Link href="#" variant="body2">
