@@ -19,8 +19,7 @@ namespace JaTour.Extensions
             {
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.Password.RequireDigit = false;
-                opt.Password.RequiredLength = 5;
-                opt.Password.RequireLowercase = true;
+                opt.Password.RequireLowercase = false;
                 opt.Password.RequireUppercase = false;
             }).AddEntityFrameworkStores<DataContext>().AddSignInManager<SignInManager<AppUser>>().AddDefaultTokenProviders();
 
@@ -36,6 +35,7 @@ namespace JaTour.Extensions
                     ValidateAudience = false
                 };
             });
+            
             services.AddScoped<TokenService>();
             return services;
         }

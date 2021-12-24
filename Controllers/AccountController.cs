@@ -2,6 +2,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using JaTour.DTOs;
 using JaTour.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using Persistence.Models;
 
 namespace JaTour.Controllers
 {
+    [AllowAnonymous]
     [ApiController]
     [Route("/[controller]")]
     public class AccountController : ControllerBase

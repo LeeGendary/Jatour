@@ -5,7 +5,7 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import { useStore } from "../../stores/store";
 import MapContainer from "../../components/Map/mapContainer";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 //Style
 const useStyles = makeStyles({

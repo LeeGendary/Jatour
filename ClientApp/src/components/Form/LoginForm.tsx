@@ -6,35 +6,29 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import React from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import { Avatar, Button } from "@mui/material";
 import { useStore } from "../../stores/store";
 import { observer } from "mobx-react-lite";
-import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
+import { UserFormValues } from "../../Models/user";
 
 export default observer(function LoginForm() {
   const { userStore } = useStore();
-  const history = useHistory();
-  const handleLoginSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [values, setValues] = useState({
+    email: "",
+    password: "",
+  });
+
+  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+    const { name, value } = event.target;
+    setValues({ ...values, [name]: value });
+  }
+  const handleLoginSubmit = (event: FormEvent) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    const values = {
-      email: "",
-      password: "",
-    };
-    values.email = data.get("email");
-    values.password = data.get("password");
-    // console.log(values);
-    userStore
-      .login(values)
-      .then((res) => {
-        history.push("/home");
-      })
-      .catch((error) => {
-        toast.error("Invalid email or password" + error.response);
-      });
+    userStore.login(values as UserFormValues).catch((error) => {
+      toast.error("Invalid email or password" + error.response);
+    });
   };
 
   return (
@@ -53,9 +47,9 @@ export default observer(function LoginForm() {
       >
         <TextField
           margin="normal"
-          required
           fullWidth
           id="email"
+          onChange={handleInputChange}
           label="Email Address"
           name="email"
           autoComplete="email"
@@ -63,11 +57,11 @@ export default observer(function LoginForm() {
         />
         <TextField
           margin="normal"
-          required
           fullWidth
           name="password"
           label="Password"
           type="password"
+          onChange={handleInputChange}
           id="password"
           autoComplete="current-password"
         />
