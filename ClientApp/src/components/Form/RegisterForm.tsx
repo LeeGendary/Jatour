@@ -13,19 +13,31 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/store";
+import { toast } from "react-toastify";
 
 export default observer(function RegisterForm() {
   const { userStore } = useStore();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleRegistrationSubmit = (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-    console.log({
-      firstName: data.get("firstName"),
-      lastName: data.get("lasstName"),
-      email: data.get("email"),
-      password: data.get("password"),
+    const values = {
+      UserName: " ",
+      DisplayName: " ",
+      Email: " ",
+      Password: " ",
+    };
+
+    values.UserName = data.get("username");
+    values.DisplayName = data.get("displayName");
+    values.Email = data.get("email");
+    values.Password = data.get("password");
+
+    userStore.register(values).catch((error) => {
+      toast.error("Invalid email or password");
     });
   };
 
@@ -37,16 +49,20 @@ export default observer(function RegisterForm() {
       <Typography component="h1" variant="h5">
         Sign up
       </Typography>
-      <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+      <Box
+        component="form"
+        noValidate
+        onSubmit={handleRegistrationSubmit}
+        sx={{ mt: 3 }}
+      >
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <TextField
-              autoComplete="given-name"
-              name="firstName"
+              name="username"
               required
               fullWidth
-              id="firstName"
-              label="First Name"
+              id="username"
+              label="User Name"
               autoFocus
             />
           </Grid>
@@ -54,10 +70,9 @@ export default observer(function RegisterForm() {
             <TextField
               required
               fullWidth
-              id="lastName"
-              label="Last Name"
-              name="lastName"
-              autoComplete="family-name"
+              id="displayName"
+              label="display Name"
+              name="displayName"
             />
           </Grid>
           <Grid item xs={12}>

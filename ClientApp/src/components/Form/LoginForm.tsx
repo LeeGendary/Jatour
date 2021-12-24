@@ -2,7 +2,6 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
-
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -11,15 +10,16 @@ import React from "react";
 import { Avatar, Button } from "@mui/material";
 import { useStore } from "../../stores/store";
 import { observer } from "mobx-react-lite";
+import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default observer(function LoginForm() {
   const { userStore } = useStore();
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const history = useHistory();
+  const handleLoginSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-
     const values = {
       email: "",
       password: "",
@@ -27,10 +27,14 @@ export default observer(function LoginForm() {
     values.email = data.get("email");
     values.password = data.get("password");
     // console.log(values);
-    userStore.login(values).catch((error) => {
-      // Error message - can send it to toaster
-      console.error("Invalid email or password");
-    });
+    userStore
+      .login(values)
+      .then((res) => {
+        history.push("/home");
+      })
+      .catch((error) => {
+        toast.error("Invalid email or password" + error.response);
+      });
   };
 
   return (
@@ -41,7 +45,12 @@ export default observer(function LoginForm() {
       <Typography component="h1" variant="h5">
         Sign in
       </Typography>
-      <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+      <Box
+        component="form"
+        noValidate
+        onSubmit={handleLoginSubmit}
+        sx={{ mt: 1 }}
+      >
         <TextField
           margin="normal"
           required

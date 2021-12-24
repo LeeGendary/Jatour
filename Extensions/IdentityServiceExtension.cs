@@ -18,6 +18,10 @@ namespace JaTour.Extensions
             services.AddIdentityCore<AppUser>(opt =>
             {
                 opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireDigit = false;
+                opt.Password.RequiredLength = 5;
+                opt.Password.RequireLowercase = true;
+                opt.Password.RequireUppercase = false;
             }).AddEntityFrameworkStores<DataContext>().AddSignInManager<SignInManager<AppUser>>().AddDefaultTokenProviders();
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));

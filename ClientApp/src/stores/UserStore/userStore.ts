@@ -2,6 +2,8 @@ import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../../api/agent";
 import { User, UserFormValues } from "../../Models/user";
 import { store } from "../store";
+import { toast } from "react-toastify";
+import { useHistory } from "react-router";
 
 export default class UserStore {
   user: User | null = null;
@@ -17,24 +19,29 @@ export default class UserStore {
   }
 
   login = async (creds: UserFormValues) => {
-    try {
-      const user = await agent.Account.login(creds);
-      store.commonStore.setToken(user.token);
-      runInAction(() => (this.user = user));
-      // redirect to dashboard
-      // history.push('/home');
-      console.log(user);
-    } catch (error) {
-      throw error;
-    }
+    await agent.Account.login(creds)
+      .then((res) => {
+        store.commonStore.setToken(res.token);
+        runInAction(() => (this.user = res));
+        console.log(res);
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+
+  register = async (creds: UserFormValues) => {
+    await agent.Account.register(creds)
+      .then(() => {})
+      .catch((error) => {
+        toast.error("Register Fail - " + error.response);
+      });
   };
 
   logout = () => {
     store.commonStore.setToken(null);
     window.localStorage.removeItem("jwt");
     this.user = null;
-    // redirect to login
-    // history.push('/');
   };
 
   getuser = async () => {
