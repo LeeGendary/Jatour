@@ -1,3 +1,4 @@
+using JaTour.Core;
 using JaTour.Extensions;
 using JaTour.Interfaces;
 using JaTour.Middleware;
@@ -34,19 +35,7 @@ namespace JaTour
                 opt.Filters.Add(new AuthorizeFilter(policy));
             });
 
-            // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/build";
-            });
-            services.AddScoped<IUserAccessor, UserAccessor>();
-            services.AddDbContext<DataContext>(opt =>
-            {
-                opt.UseSqlite(_config.GetConnectionString("DefaultConnection"));
-            });
-            services.AddCors();
-
-            services.AddIdentityServices(_config);
+            services.AddApplicationServices(_config);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

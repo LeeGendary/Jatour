@@ -1,4 +1,5 @@
-﻿using JaTour.Interfaces;
+﻿using AutoMapper;
+using JaTour.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +17,11 @@ namespace JaTour.Controllers
     {
         private readonly DataContext _context;
         private readonly IUserAccessor _usserAccessor;
+        private readonly IMapper _mapper;
 
-        public TripsController(DataContext context, IUserAccessor usserAccessor )
+        public TripsController(DataContext context, IUserAccessor usserAccessor, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
             _usserAccessor = usserAccessor;
         }
@@ -33,9 +36,10 @@ namespace JaTour.Controllers
         // Get One Trip
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Trip>> GetTrip(Guid id) {
-            var trip =  await _context.Trips.FindAsync(id);
-            if( trip == null) return NotFound();
+        public async Task<ActionResult<Trip>> GetTrip(Guid id)
+        {
+            var trip = await _context.Trips.FindAsync(id);
+            if (trip == null) return NotFound();
             return trip;
         }
 
@@ -43,7 +47,7 @@ namespace JaTour.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTrip(Trip trip)
         {
-            AppUser user = await _context.Users.FirstOrDefaultAsync(x => 
+            AppUser user = await _context.Users.FirstOrDefaultAsync(x =>
             x.UserName == _usserAccessor.Getusername());
 
             var attendee = new TripAttendee
@@ -52,33 +56,33 @@ namespace JaTour.Controllers
                 TripId = trip.Id,
                 IsHost = true
             };
-            
+
             //  trip.Attendees.Add(attendee);
-             _context.Trips.Add(trip);
+            _context.Trips.Add(trip);
             await _context.SaveChangesAsync();
             return Ok();
         }
 
         // Update trip
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTrip(Guid id, [FromBody]Trip trip)
+        public async Task<IActionResult> UpdateTrip(Guid id, [FromBody] Trip trip)
         {
             var item = await _context.Trips.FindAsync(id);
-            if(item != null)
+            if (item != null)
             {
-                item.Title = trip.Title ?? item.Title;
-                item.Author = trip.Author ?? item.Author;
-                item.ShortDescription = trip.ShortDescription ?? item.ShortDescription;
-                item.Description = trip.Description ?? item.Description;
-                item.StartDate = trip.StartDate ;
-                item.EndDate = trip.EndDate;
-                item.PicCoverUrl = trip.PicCoverUrl ?? item.PicCoverUrl;
-                item.rating = trip.rating ;
-                item.Location = trip.Location ?? item.Location;
-                item.cost = trip.cost;
-                item.Duration = item.Duration ;
-                item.createdAt = item.createdAt;
-                // Add rest 
+                // item.Title = trip.Title ?? item.Title;
+                // item.Author = trip.Author ?? item.Author;
+                // item.ShortDescription = trip.ShortDescription ?? item.ShortDescription;
+                // item.Description = trip.Description ?? item.Description;
+                // item.StartDate = trip.StartDate;
+                // item.EndDate = trip.EndDate;
+                // item.PicCoverUrl = trip.PicCoverUrl ?? item.PicCoverUrl;
+                // item.rating = trip.rating;
+                // item.Location = trip.Location ?? item.Location;
+                // item.cost = trip.cost;
+                // item.Duration = item.Duration;
+                // item.createdAt = item.createdAt;
+                _mapper.Map(trip, item);
             }
             await _context.SaveChangesAsync();
             return Ok();
