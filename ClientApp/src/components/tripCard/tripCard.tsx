@@ -37,9 +37,10 @@ export default function TripCard({ trip }: Props) {
     <Card raised={true} sx={{ maxWidth: 500 }}>
       <CardMedia
         component="img"
+        width="500"
         height="200"
-        image={trip.picCoverUrl}
-        alt="green iguana"
+        src={trip.picCoverUrl}
+        alt={trip.title}
       />
       <CardContent>
         <Box sx={{ display: "flex", flexDirection: "column", padding: "20px" }}>

@@ -21,7 +21,7 @@ export default observer(function TripDashboard() {
       container
       spacing={2}
       sx={{
-        gridTemplateColumns: "repeat(auto-fit, minmax(650, 1fr))",
+        gridTemplateColumns: "repeat(auto-fit, minmax(550, 1fr))",
       }}
       // xs={12}
       // sm={12}

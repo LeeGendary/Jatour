@@ -73,7 +73,7 @@ namespace JaTour.Controllers
         }
 
         // Update trip
-        [Authorize(Policy ="IsTripHost")]
+        // [Authorize(Policy ="IsTripHost")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTrip(Guid id, [FromBody] Trip trip)
         {

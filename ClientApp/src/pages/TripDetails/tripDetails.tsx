@@ -7,6 +7,7 @@ import { useStore } from "../../stores/store";
 import MapContainer from "../../components/Map/mapContainer";
 import { useHistory } from "react-router-dom";
 import TripListAttendee from "../../components/TripListAttendee/TripListAttendee";
+import { LoadingButton } from "@mui/lab";
 
 //Style
 const useStyles = makeStyles({
@@ -25,7 +26,7 @@ const useStyles = makeStyles({
 export default observer(function TripDetails() {
   const history = useHistory();
   const { tripStore } = useStore();
-  const { selectedTrip: trip, loadTrip } = tripStore;
+  const { updateAttendance, loading, selectedTrip: trip, loadTrip } = tripStore;
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -60,6 +61,21 @@ export default observer(function TripDetails() {
             >
               {trip?.title}
             </Typography>
+            <Typography
+              variant="h5"
+              gutterBottom
+              sx={{
+                lineHeight: 1.3,
+                backgroundImage:
+                  "linear-gradient( to bottom right, rgba(125, 213, 111, 0.85), rgba(40, 180, 135, 0.85) )",
+                color: "transparent",
+                backgroundClip: "text",
+                textAlign: "center",
+              }}
+            >
+              Hosted by {trip?.host?.displayName}
+            </Typography>
+
             <Typography gutterBottom variant="body1">
               {trip?.description}
               Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
@@ -72,9 +88,36 @@ export default observer(function TripDetails() {
               Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
               officia deserunt mollit anim id est laborum!
             </Typography>
-            <Button variant="outlined" onClick={() => history.push("/home")}>
-              Go back to homepage
-            </Button>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                mt: 4,
+              }}
+            >
+              <Button variant="outlined" onClick={() => history.push("/home")}>
+                Go back to homepage
+              </Button>
+              {trip?.isHost ? (
+                <Button
+                  variant="contained"
+                  color="warning"
+                  onClick={() => history.push(`/manage/${trip.id}`)}
+                >
+                  Manage Trip
+                </Button>
+              ) : (
+                <LoadingButton
+                  loading={loading}
+                  variant="contained"
+                  onClick={updateAttendance}
+                  size="large"
+                  color={trip?.isGoing ? "error" : "success"}
+                >
+                  {trip?.isGoing ? "Cancel attendance" : "Join Trip"}
+                </LoadingButton>
+              )}
+            </Box>
           </Paper>
         </Grid>
       </Grid>

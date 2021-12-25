@@ -72,6 +72,7 @@ const Trips = {
   create: (trip: Trip) => request.post<void>("/Trips", trip),
   update: (trip: Trip) => request.put<void>(`/Trips/${trip.id}`, trip),
   delete: (id: string) => request.del<void>(`/Trips/${id}`),
+  attend: (id: string) => request.post<void>(`/Trips/${id}/attend`, {}),
 };
 
 const Account = {

@@ -4,6 +4,7 @@ import { Trip } from "../../Models/trip";
 import { v4 as uuidv4 } from "uuid";
 import { store } from "../store";
 import { toast } from "react-toastify";
+import { Profile } from "../../Models/profiles";
 export default class TripStore {
   trips: Trip[] = [];
   tripRegistry = new Map<string, Trip>();
@@ -19,6 +20,12 @@ export default class TripStore {
   }
 
   private setTrip = (trip: Trip) => {
+    const user = store.userStore.user;
+    if (user) {
+      trip.isGoing = trip.attendees!.some((a) => a.username === user.username);
+      trip.isHost = trip.author === user.username;
+      trip.host = trip.attendees?.find((x) => x.username === trip.author);
+    }
     trip.startDate = new Date(trip.startDate!);
     trip.endDate = new Date(trip.endDate!);
     this.tripRegistry.set(trip.id, trip);
@@ -62,6 +69,7 @@ export default class TripStore {
   setLoadingInitial = (state: boolean) => {
     this.loadingInitial = state;
   };
+
   selectTrip = (id: string) => {
     this.selectedTrip = this.trips.find((x) => x.id === id);
     this.selectedTrip = this.tripRegistry.get(id);
@@ -138,7 +146,7 @@ export default class TripStore {
       })
       .catch((error) => {
         console.log(error);
-        toast.error(`Fail to Update trip - ${error.response.data.title}`, {
+        toast.error(`Fail to Update trip - ${error.response}`, {
           icon: "😔",
           position: "bottom-left",
           theme: "colored",
@@ -183,6 +191,32 @@ export default class TripStore {
       });
   };
 
+  //Update Attendance
+  updateAttendance = async (id: string) => {
+    const user = store.userStore.user;
+    this.loading = true;
+    try {
+      await agent.Trips.attend(this.selectedTrip!.id);
+      runInAction(() => {
+        if (this.selectedTrip?.isGoing) {
+          this.selectedTrip.attendees = this.selectedTrip.attendees?.filter(
+            (a) => a.username !== user?.username
+          );
+          this.selectedTrip.isGoing = false;
+        } else {
+          const attendee = new Profile(user!);
+          this.selectedTrip?.attendees?.push(attendee);
+          this.selectedTrip!.isGoing = true;
+        }
+        this.tripRegistry.set(this.selectedTrip!.id, this.selectedTrip!);
+      });
+    } catch (error) {
+      console.error(error);
+      // toast.error(error);
+    } finally {
+      runInAction(() => (this.loading = false));
+    }
+  };
   //GET By Date Order
   // Issues: StartDate return string
   // Fix

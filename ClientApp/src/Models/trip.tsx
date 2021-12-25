@@ -16,5 +16,8 @@ export interface Trip {
   duration: number;
   createdAt: Date;
   isCancelled?: boolean;
+  isGoing?: boolean;
+  isHost?: boolean;
+  host?: Profile;
   attendees?: Profile[];
 }
