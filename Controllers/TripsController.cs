@@ -48,6 +48,8 @@ namespace JaTour.Controllers
             return trip;
         }
 
+        
+
         // create trip
         [HttpPost]
         public async Task<IActionResult> CreateTrip(Trip trip)
@@ -93,6 +95,44 @@ namespace JaTour.Controllers
             }
             await _context.SaveChangesAsync();
             return Ok();
+        }
+
+        [HttpPost("{id}/attend")]
+        public async Task<IActionResult> UpdateAttendance(Guid id)
+        {
+            var trip = await _context.Trips.Include(a => a.Attendees)
+            .ThenInclude(u => u.AppUser)
+            .SingleOrDefaultAsync(x => x.Id == id);
+
+            if (trip == null) return NotFound();
+             var user = await _context.Users.FirstOrDefaultAsync(x =>
+            x.UserName == _usserAccessor.Getusername()); 
+            if (user  == null) return null;
+
+            var Author = trip.Attendees.FirstOrDefault(x => x.IsHost)?.AppUser?.UserName;
+            var attendance = trip.Attendees.FirstOrDefault(x => x.AppUser.UserName == user.UserName);
+
+            if (attendance != null && Author == user.UserName)
+            {
+                // Add a Toggle
+                trip.IsCancelled = !trip.IsCancelled;
+            }
+
+            if(attendance != null && Author != user.UserName){
+                trip.Attendees.Remove(attendance);
+            }
+
+            if(attendance == null)
+            {
+                attendance = new TripAttendee
+                {
+                    AppUser = user,
+                    Trip = trip,
+                    IsHost = false
+                };
+                trip.Attendees.Add(attendance);
+            }
+            return Ok(await _context.SaveChangesAsync() > 0);
         }
         // Delete trip
         [HttpDelete("{id}")]

@@ -22,6 +22,8 @@ namespace JaTour.DTOs
         public Decimal cost { get; set; }
         public int Duration { get; set; }
         public DateTime createdAt { get; set; }
+
+        public bool IsCancelled { get; set; }
         public ICollection<Profile> Attendees { get; set; }
     }
 }
