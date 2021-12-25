@@ -1,8 +1,10 @@
-﻿// Typescript interface
+﻿import { Profile } from "./profiles";
+
+// Typescript interface
 export interface Trip {
   id: string;
   title: string;
-  author: string;
+  author?: string;
   shortDescription: string;
   description: string;
   startDate: Date | null;
@@ -13,4 +15,6 @@ export interface Trip {
   cost: number;
   duration: number;
   createdAt: Date;
+  isCancelled?: boolean;
+  attendees?: Profile[];
 }

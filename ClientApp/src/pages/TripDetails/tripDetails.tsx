@@ -1,4 +1,4 @@
-import { Button, Grid, Paper, Typography } from "@mui/material";
+import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
@@ -6,6 +6,7 @@ import { useParams } from "react-router";
 import { useStore } from "../../stores/store";
 import MapContainer from "../../components/Map/mapContainer";
 import { useHistory } from "react-router-dom";
+import TripListAttendee from "../../components/TripListAttendee/TripListAttendee";
 
 //Style
 const useStyles = makeStyles({
@@ -100,6 +101,23 @@ export default observer(function TripDetails() {
             Quick Facts
           </Typography>
           <Typography variant="body1">{trip?.description}</Typography>
+          <Typography
+            variant="h3"
+            sx={{
+              fontSize: "2.25rem",
+              fontWeight: 700,
+              textTransform: "uppercase",
+              backgroundImage: "linear-gradient(to right, #7dd56f, #28b487)",
+              color: "transparent",
+              lineHeight: 1.3,
+              backgroundClip: "text",
+            }}
+          >
+            Attendees
+          </Typography>
+          <Box sx={{ mt: 2 }}>
+            <TripListAttendee attendees={trip?.attendees!} />
+          </Box>
         </Grid>
       </Grid>
     </Grid>
