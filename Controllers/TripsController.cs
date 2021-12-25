@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using JaTour.DTOs;
 using JaTour.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -30,17 +32,18 @@ namespace JaTour.Controllers
 
         // Get All trip
         [HttpGet]
-        public async Task<ActionResult<List<Trip>>> GetTrips()
+        public async Task<ActionResult<List<TripDto>>> GetTrips()
         {
-            return await _context.Trips.ToListAsync();
+            return await _context.Trips.ProjectTo<TripDto>(_mapper.ConfigurationProvider).ToListAsync();
         }
 
         // Get One Trip
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Trip>> GetTrip(Guid id)
+        public async Task<ActionResult<TripDto>> GetTrip(Guid id)
         {
-            var trip = await _context.Trips.FindAsync(id);
+            var trip = await _context.Trips.ProjectTo<TripDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync(x => x.Id == id);
             if (trip == null) return NotFound();
             return trip;
         }
@@ -60,6 +63,8 @@ namespace JaTour.Controllers
             };
 
             trip.Attendees.Add(attendee);
+            // Add Author
+            trip.Author = user.UserName;
             _context.Trips.Add(trip);
             await _context.SaveChangesAsync();
             return Ok();
