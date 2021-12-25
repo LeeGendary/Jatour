@@ -12,8 +12,10 @@ import { Divider, IconButton } from "@mui/material";
 import {
   AccessTime,
   Delete,
-  Favorite,
+  FavoriteBorder,
   LocationOn,
+  People,
+  Person,
   Star,
 } from "@mui/icons-material";
 import { Box } from "@mui/system";
@@ -57,6 +59,8 @@ export default function TripCard({ trip }: Props) {
           sx={{
             display: "flex",
             flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-evenly",
           }}
         >
           <IconButton aria-label="add to favorites">
@@ -71,13 +75,23 @@ export default function TripCard({ trip }: Props) {
               {trip.duration}
             </Typography>
           </IconButton>
+          {trip.attendees ? (
+            <IconButton aria-label="add to favorites">
+              {trip.attendees?.length === 1 ? <Person /> : <People />}
+              <Typography variant="body2" color="text.secondary">
+                {trip.attendees?.length} going
+              </Typography>
+            </IconButton>
+          ) : (
+            " "
+          )}
         </Box>
       </CardContent>
       <Divider variant="middle" />
       <CardActions sx={{ justifyContent: "space-between", padding: "20px" }}>
         <Box>
           <IconButton aria-label="add to favorites">
-            <Favorite />
+            <FavoriteBorder />
           </IconButton>
           <IconButton aria-label="share">
             <Star sx={{ color: "rgb(255, 200, 26)" }} />
@@ -86,6 +100,7 @@ export default function TripCard({ trip }: Props) {
         </Box>
         <Box>
           <Button
+            variant="outlined"
             component={Link}
             to={`/details/${trip.id}`}
             size="small"
