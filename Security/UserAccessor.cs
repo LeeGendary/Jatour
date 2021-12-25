@@ -17,7 +17,7 @@ namespace JaTour.Security
         //get user token
         public string Getusername()
         {
-            return _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            return _httpContextAccessor.HttpContext.User.Identity.Name;
         }
     }
 }

@@ -18,9 +18,11 @@ namespace JaTour.Controllers
         private readonly DataContext _context;
         private readonly IUserAccessor _usserAccessor;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TripsController(DataContext context, IUserAccessor usserAccessor, IMapper mapper)
+        public TripsController(DataContext context, IUserAccessor usserAccessor, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
             _mapper = mapper;
             _context = context;
             _usserAccessor = usserAccessor;
@@ -52,12 +54,12 @@ namespace JaTour.Controllers
 
             var attendee = new TripAttendee
             {
-                AppUserId = user.Id,
-                TripId = trip.Id,
+                AppUser = user,
+                Trip = trip,
                 IsHost = true
             };
 
-            //  trip.Attendees.Add(attendee);
+            trip.Attendees.Add(attendee);
             _context.Trips.Add(trip);
             await _context.SaveChangesAsync();
             return Ok();

@@ -17,12 +17,13 @@ namespace JaTour.Extensions
             {
                 configuration.RootPath = "ClientApp/build";
             });
-            services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddDbContext<DataContext>(opt =>
             {
                 opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
             });
             services.AddCors();
+            
+            services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddIdentityServices(config);
 
