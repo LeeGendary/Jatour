@@ -73,6 +73,7 @@ namespace JaTour.Controllers
         }
 
         // Update trip
+        [Authorize(Policy ="IsTripHost")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTrip(Guid id, [FromBody] Trip trip)
         {
@@ -135,6 +136,7 @@ namespace JaTour.Controllers
             return Ok(await _context.SaveChangesAsync() > 0);
         }
         // Delete trip
+        [Authorize(Policy ="IsTripHost")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Trip>> DeleteTrip(Guid id)
         {

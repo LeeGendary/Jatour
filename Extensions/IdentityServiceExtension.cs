@@ -1,5 +1,7 @@
-﻿using JaTour.Services;
+﻿using JaTour.Security;
+using JaTour.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,6 +38,12 @@ namespace JaTour.Extensions
                 };
             });
             
+            services.AddAuthorization(opt => {
+                opt.AddPolicy("IsTripHost", policy => {
+                    policy.Requirements.Add(new IsHostRequirement());
+                });
+            });
+            services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
             services.AddScoped<TokenService>();
             return services;
         }
