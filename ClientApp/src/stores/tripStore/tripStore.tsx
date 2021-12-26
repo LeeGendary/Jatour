@@ -228,6 +228,20 @@ export default class TripStore {
       runInAction(() => (this.loading = false));
     }
   };
+
+  cancelActivityToggle = async () => {
+    this.loading = true;
+    try {
+      await agent.Trips.attend(this.selectedTrip!.id);
+      runInAction(() => {
+        this.selectedTrip!.isCancelled = !this.selectedTrip?.isCancelled;
+        this.tripRegistry.set(this.selectedTrip!.id, this.selectedTrip!);
+      });
+    } catch (error) {
+    } finally {
+      runInAction(() => (this.loading = false));
+    }
+  };
   //GET By Date Order
   // Issues: StartDate return string
   // Fix

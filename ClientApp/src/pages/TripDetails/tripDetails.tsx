@@ -84,7 +84,13 @@ const itemData = [
 export default observer(function TripDetails() {
   const history = useHistory();
   const { tripStore, modalStore } = useStore();
-  const { updateAttendance, loading, selectedTrip: trip, loadTrip } = tripStore;
+  const {
+    updateAttendance,
+    cancelActivityToggle,
+    loading,
+    selectedTrip: trip,
+    loadTrip,
+  } = tripStore;
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -156,20 +162,31 @@ export default observer(function TripDetails() {
                 Go back to homepage
               </Button>
               {trip?.isHost ? (
-                <Button
-                  variant="contained"
-                  color="warning"
-                  onClick={() => modalStore.openModal(<CreateEditTrip />)}
-                >
-                  Manage Trip
-                </Button>
+                <>
+                  <Button
+                    variant="contained"
+                    color={trip.isCancelled ? "success" : "error"}
+                    onClick={cancelActivityToggle}
+                  >
+                    {trip.isCancelled ? "Re-activate Trip" : "Cancel Trip"}
+                  </Button>
+                  <Button
+                    disabled={trip.isCancelled}
+                    variant="contained"
+                    color="warning"
+                    onClick={() => modalStore.openModal(<CreateEditTrip />)}
+                  >
+                    Manage Trip
+                  </Button>
+                </>
               ) : (
                 <LoadingButton
                   loading={loading}
+                  disabled={trip?.isCancelled}
                   variant="contained"
-                  onClick={updateAttendance}
                   size="large"
                   color={trip?.isGoing ? "error" : "success"}
+                  onClick={updateAttendance}
                 >
                   {trip?.isGoing ? "Cancel attendance" : "Join Trip"}
                 </LoadingButton>
