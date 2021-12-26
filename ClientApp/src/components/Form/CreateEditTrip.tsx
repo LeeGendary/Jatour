@@ -25,7 +25,7 @@ const useStyles = makeStyles({
 
 export default observer(function CreateEditTripForm() {
   const history = useHistory();
-  const { tripStore, modalStore, snackbarStore } = useStore();
+  const { tripStore, modalStore } = useStore();
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
 
@@ -34,7 +34,7 @@ export default observer(function CreateEditTripForm() {
   const [trip, setTrip] = useState<TripFormValues>(new TripFormValues());
 
   useEffect(() => {
-    if (id) loadTrip(id).then((trip) => setTrip(new TripFormValues(trip)));
+    if (id) loadTrip(id).then((trip) => setTrip(new TripFormValues(trip!)));
   }, [id, loadTrip]);
 
   function handleInputChange(

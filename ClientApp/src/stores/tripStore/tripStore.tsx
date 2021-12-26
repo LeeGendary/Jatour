@@ -5,7 +5,6 @@ import { Trip, TripFormValues } from "../../Models/trip";
 import { store } from "../store";
 import { toast } from "react-toastify";
 import { Profile } from "../../Models/profiles";
-import { history } from "../..";
 export default class TripStore {
   trips: Trip[] = [];
   tripRegistry = new Map<string, Trip>();

@@ -3,7 +3,6 @@
   Home,
   Logout,
   Person,
-  QuestionMark,
   QuestionMarkRounded,
   Settings,
 } from "@mui/icons-material";

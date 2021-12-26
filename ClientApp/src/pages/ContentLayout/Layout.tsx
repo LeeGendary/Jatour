@@ -1,5 +1,5 @@
-import DateAdapter from "@mui/lab/AdapterDateFns";
-import { CalendarPicker, LocalizationProvider } from "@mui/lab";
+// import DateAdapter from "@mui/lab/AdapterDateFns";
+// import { CalendarPicker, LocalizationProvider } from "@mui/lab";
 import {
   Avatar,
   AvatarGroup,
@@ -11,26 +11,28 @@ import {
   RadioGroup,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import TripDashboard from "../Trip-Dashboard/TripDashboard";
-import { makeStyles } from "@mui/styles";
 
-const useStyles = makeStyles({
-  calendar: {
-    background: "white",
-    boxShadow: "0 3px 10px rgb(0 0 0 / 0.2)",
-    borderRadius: "10px",
-    marginBottom: 10,
-  },
-});
+// import { makeStyles } from "@mui/styles";
+
+// const useStyles = makeStyles({
+//   calendar: {
+//     background: "white",
+//     boxShadow: "0 3px 10px rgb(0 0 0 / 0.2)",
+//     borderRadius: "10px",
+//     marginBottom: 10,
+//   },
+// });
+
 const sortOptions = [
   { value: "name", label: "Alphabetical" },
   { value: "rating", label: "Rating - High to low" },
   { value: "cost", label: "Cost - High to low " },
 ];
 export default function Layout() {
-  const classes = useStyles();
-  const [date, setDate] = useState<Date | null>(new Date());
+  // const classes = useStyles();
+  // const [date, setDate] = useState<Date | null>(new Date());
 
   return (
     <Grid container spacing={2} sx={{ mt: 10, justifyContent: "center" }}>
