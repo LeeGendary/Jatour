@@ -34,10 +34,9 @@ export default function TripCard({ trip }: Props) {
     deleteTrip(id);
   }
   return (
-    <Card raised={true} sx={{ maxWidth: 500 }}>
+    <Card raised={true} sx={{ minWidth: 400, maxWidth: 400 }}>
       <CardMedia
         component="img"
-        width="500"
         height="200"
         src={trip.picCoverUrl}
         alt={trip.title}

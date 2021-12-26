@@ -1,7 +1,16 @@
-﻿import { Add, Home, Logout, Person, Settings } from "@mui/icons-material";
+﻿import {
+  Add,
+  Home,
+  Logout,
+  Person,
+  QuestionMark,
+  QuestionMarkRounded,
+  Settings,
+} from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import {
   CSSObject,
+  Divider,
   Drawer,
   List,
   ListItem,
@@ -65,7 +74,11 @@ const useStyles = makeStyles({
   },
 });
 export default observer(function LeftBar() {
-  const { themeStore, modalStore } = useStore();
+  const {
+    themeStore,
+    modalStore,
+    userStore: { logout },
+  } = useStore();
   const classes = useStyles();
   const menuItems = [
     {
@@ -76,12 +89,12 @@ export default observer(function LeftBar() {
     {
       text: "Messages",
       icon: <ChatIcon />,
-      path: "/home",
+      path: "/message",
     },
     {
       text: "Friends",
       icon: <Person />,
-      path: "/home",
+      path: "/hangout",
     },
     {
       text: "Setting",
@@ -89,9 +102,9 @@ export default observer(function LeftBar() {
       path: "/testing",
     },
     {
-      text: "Logout",
-      icon: <Logout />,
-      path: "/home",
+      text: "Help",
+      icon: <QuestionMarkRounded />,
+      path: "/help",
     },
   ];
   return (
@@ -117,6 +130,13 @@ export default observer(function LeftBar() {
             <ListItemText primary={item.text} />
           </ListItem>
         ))}
+        <Divider />
+        <ListItem button key="/logout" onClick={logout}>
+          <ListItemIcon sx={{ color: "white" }}>
+            <Logout />
+          </ListItemIcon>
+          <ListItemText primary="Logout" />
+        </ListItem>
       </List>
     </LeftBarContainer>
   );

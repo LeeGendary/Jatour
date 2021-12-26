@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { Trip } from "../Models/trip";
+import { Trip, TripFormValues } from "../Models/trip";
 import { User, UserFormValues } from "../Models/user";
 import { store } from "../stores/store";
 import { toast } from "react-toastify";
@@ -69,8 +69,9 @@ const request = {
 const Trips = {
   list: () => request.get<Trip[]>("/Trips"),
   details: (id: string) => request.get<Trip>(`/Trips/${id}`),
-  create: (trip: Trip) => request.post<void>("/Trips", trip),
-  update: (trip: Trip) => request.put<void>(`/Trips/${trip.id}`, trip),
+  create: (trip: TripFormValues) => request.post<void>("/Trips", trip),
+  update: (trip: TripFormValues) =>
+    request.put<void>(`/Trips/${trip.id}`, trip),
   delete: (id: string) => request.del<void>(`/Trips/${id}`),
   attend: (id: string) => request.post<void>(`/Trips/${id}/attend`, {}),
 };

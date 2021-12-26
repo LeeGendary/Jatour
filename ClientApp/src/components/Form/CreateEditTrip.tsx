@@ -6,11 +6,13 @@ import {
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useStore } from "../../stores/store";
 import { observer } from "mobx-react-lite";
-import { Trip } from "../../Models/trip";
+import { TripFormValues } from "../../Models/trip";
+import { useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 const useStyles = makeStyles({
   form: {
     padding: 30,
@@ -22,27 +24,18 @@ const useStyles = makeStyles({
 });
 
 export default observer(function CreateEditTripForm() {
+  const history = useHistory();
   const { tripStore, modalStore, snackbarStore } = useStore();
   const classes = useStyles();
+  const { id } = useParams<{ id: string }>();
 
-  const { selectedTrip, closeModalForm, createTrip, updateTrip } = tripStore;
+  const { closeModalForm, createTrip, updateTrip, loadTrip } = tripStore;
 
-  const initialState = selectedTrip ?? {
-    id: "",
-    title: "",
-    author: "",
-    shortDescription: "",
-    description: "",
-    startDate: null,
-    endDate: null,
-    picCoverUrl: "",
-    rating: null,
-    location: "",
-    cost: "",
-    duration: "",
-  };
+  const [trip, setTrip] = useState<TripFormValues>(new TripFormValues());
 
-  const [trip, setTrip] = useState(initialState);
+  useEffect(() => {
+    if (id) loadTrip(id).then((trip) => setTrip(new TripFormValues(trip)));
+  }, [id, loadTrip]);
 
   function handleInputChange(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -53,9 +46,13 @@ export default observer(function CreateEditTripForm() {
 
   function handelSubmit(event: FormEvent) {
     event.preventDefault();
-    trip.id ? updateTrip(trip as Trip) : createTrip(trip as Trip);
+    if (!trip.id) {
+      trip.id = uuidv4();
+      createTrip(trip).then(() => history.push(`/details/${trip.id}`));
+    } else {
+      updateTrip(trip).then(() => history.push(`/details/${trip.id}`));
+    }
     modalStore.closeModal();
-    snackbarStore.openSnackBar(<h2>Trip created</h2>);
   }
 
   return (

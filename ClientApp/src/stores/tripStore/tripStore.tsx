@@ -1,10 +1,11 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../../api/agent";
-import { Trip } from "../../Models/trip";
-import { v4 as uuidv4 } from "uuid";
+import { Trip, TripFormValues } from "../../Models/trip";
+
 import { store } from "../store";
 import { toast } from "react-toastify";
 import { Profile } from "../../Models/profiles";
+import { history } from "../..";
 export default class TripStore {
   trips: Trip[] = [];
   tripRegistry = new Map<string, Trip>();
@@ -89,20 +90,27 @@ export default class TripStore {
     store.modalStore.closeModal();
   };
 
+  private getTrip = (id: string) => {
+    return this.tripRegistry.get(id);
+  };
   /*
     TRIP CRUD OPERATION 
   */
   // Create Trip
-  createTrip = async (trip: Trip) => {
+  createTrip = async (trip: TripFormValues) => {
     this.loading = true;
-    trip.id = uuidv4();
+    const user = store.userStore.user;
+    const attendee = new Profile(user!);
     trip.startDate = new Date(trip.startDate!);
     trip.endDate = new Date(trip.endDate!);
     await agent.Trips.create(trip as Trip)
       .then((res) => {
+        const newTrip = new Trip(trip);
+        newTrip.author = user!.username;
+        newTrip.attendees = [attendee];
+        this.setTrip(newTrip);
         runInAction(() => {
-          // this.trips.push(trip);
-          this.tripRegistry.set(trip.id, trip);
+          this.selectedTrip = newTrip;
           this.editMode = false;
           this.loading = false;
         });
@@ -128,13 +136,16 @@ export default class TripStore {
   };
 
   // Update Trip
-  updateTrip = async (trip: Trip) => {
+  updateTrip = async (trip: TripFormValues) => {
     this.loading = true;
     await agent.Trips.update(trip as Trip)
       .then((res) => {
         runInAction(() => {
-          this.trips = [...this.trips.filter((a) => a.id !== trip.id), trip];
-          this.tripRegistry.set(trip.id, trip);
+          if (trip.id) {
+            let updatedTrips = { ...this.getTrip(trip.id), ...trip };
+            this.tripRegistry.set(trip.id, updatedTrips as Trip);
+            this.selectedTrip = updatedTrips as Trip;
+          }
           this.editMode = false;
           this.loading = false;
         });

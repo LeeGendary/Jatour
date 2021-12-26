@@ -1,4 +1,12 @@
-import { Box, Button, Grid, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  ImageList,
+  ImageListItem,
+  Paper,
+  Typography,
+} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
@@ -8,6 +16,16 @@ import MapContainer from "../../components/Map/mapContainer";
 import { useHistory } from "react-router-dom";
 import TripListAttendee from "../../components/TripListAttendee/TripListAttendee";
 import { LoadingButton } from "@mui/lab";
+import CreateEditTrip from "../../components/Form/CreateEditTrip";
+
+function srcset(image: string, size: number, rows = 1, cols = 1) {
+  return {
+    src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
+    srcSet: `${image}?w=${size * cols}&h=${
+      size * rows
+    }&fit=crop&auto=format&dpr=2 2x`,
+  };
+}
 
 //Style
 const useStyles = makeStyles({
@@ -22,10 +40,50 @@ const useStyles = makeStyles({
     // clipPath: "polygon( 0 0, 100% 0, 100% calc(100% - 5vw ), 0 100% )",
   },
 });
-
+const itemData = [
+  {
+    img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
+    title: "Breakfast",
+    rows: 2,
+    cols: 2,
+  },
+  {
+    img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
+    title: "Burger",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
+    title: "Camera",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
+    title: "Coffee",
+    cols: 2,
+  },
+  {
+    img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8",
+    title: "Hats",
+    cols: 2,
+  },
+  {
+    img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
+    title: "Honey",
+    author: "@arwinneil",
+    rows: 2,
+    cols: 2,
+  },
+  {
+    img: "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6",
+    title: "Basketball",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f",
+    title: "Fern",
+  },
+];
 export default observer(function TripDetails() {
   const history = useHistory();
-  const { tripStore } = useStore();
+  const { tripStore, modalStore } = useStore();
   const { updateAttendance, loading, selectedTrip: trip, loadTrip } = tripStore;
   const { id } = useParams<{ id: string }>();
 
@@ -36,11 +94,10 @@ export default observer(function TripDetails() {
   const classes = useStyles();
   return (
     <Grid container direction="row">
-      <Grid
-        item
+      <Box
         className={classes.headerImage}
         sx={{ backgroundImage: `url("${trip?.picCoverUrl}")` }}
-      ></Grid>
+      ></Box>
 
       <Grid item container justifyContent="center" sx={{ mt: -8, zIndex: 30 }}>
         <Grid item xs={12} sm={10} md={10}>
@@ -102,7 +159,7 @@ export default observer(function TripDetails() {
                 <Button
                   variant="contained"
                   color="warning"
-                  onClick={() => history.push(`/manage/${trip.id}`)}
+                  onClick={() => modalStore.openModal(<CreateEditTrip />)}
                 >
                   Manage Trip
                 </Button>
@@ -122,7 +179,7 @@ export default observer(function TripDetails() {
         </Grid>
       </Grid>
 
-      <Grid item container sx={{ m: 10 }}>
+      <Grid item container sx={{ m: 4 }}>
         <Grid item sm={8}>
           <Paper elevation={3}>
             <MapContainer />
@@ -162,6 +219,53 @@ export default observer(function TripDetails() {
             <TripListAttendee attendees={trip?.attendees!} />
           </Box>
         </Grid>
+      </Grid>
+
+      <Grid item alignContent="center" sx={{ m: 4, mx: 10 }}>
+        <Typography
+          variant="h2"
+          sx={{
+            fontWeight: 700,
+            textTransform: "uppercase",
+            backgroundImage:
+              "linear-gradient( to bottom right, rgba(125, 213, 111, 0.85), rgba(40, 180, 135, 0.85) )",
+            color: "transparent",
+            lineHeight: 1.3,
+            backgroundClip: "text",
+          }}
+        >
+          Photos
+        </Typography>
+        <Paper elevation={5} sx={{ width: "80vw", mx: "auto" }}>
+          <ImageList
+            sx={{
+              width: "100%",
+              height: "100%",
+              backgroundColor: "#ffffffc1",
+              padding: 2,
+              m: 0,
+            }}
+            variant="quilted"
+            cols={4}
+            rowHeight={200}
+          >
+            {itemData.map((item) => (
+              <ImageListItem
+                sx={{ borderRadius: 10, margin: 1 }}
+                key={item.img}
+                cols={item.cols || 1}
+                rows={item.rows || 1}
+              >
+                <img
+                  {...srcset(item.img, 150, item.rows, item.cols)}
+                  alt={item.title}
+                  loading="lazy"
+                  style={{ borderRadius: "20px", padding: "10px" }}
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </Paper>
       </Grid>
     </Grid>
   );
