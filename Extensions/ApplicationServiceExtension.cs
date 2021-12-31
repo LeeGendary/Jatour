@@ -1,5 +1,6 @@
 using JaTour.Core;
 using JaTour.Interfaces;
+using JaTour.Photos;
 using JaTour.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +25,7 @@ namespace JaTour.Extensions
             services.AddCors();
             
             services.AddScoped<IUserAccessor, UserAccessor>();
+            services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddIdentityServices(config);
 
