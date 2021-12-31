@@ -65,5 +65,25 @@ namespace JaTour.Controllers
 
             return Ok(await _context.SaveChangesAsync());
         }
+
+
+        // Set a main photo for user
+        // Delete Photos
+        [HttpPost("addUserPhoto/{id}/setMain")]
+        public async Task<ActionResult> setMainPhoto(string id)
+        {
+            var user = await _context.Users.Include(p => p.Photos).FirstOrDefaultAsync(x => x.UserName == _usserAccessor.Getusername());
+            if (user == null) return null;
+
+            var photo = user.Photos.FirstOrDefault(x => x.Id == id);
+            if (photo == null) return null;
+
+            var currentMain = user.Photos.FirstOrDefault(x => x.IsMain);
+            if (currentMain != null) currentMain.IsMain = false;
+
+            photo.IsMain = true;
+
+            return Ok(await _context.SaveChangesAsync());
+        }
     }
 }

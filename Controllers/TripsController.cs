@@ -80,18 +80,6 @@ namespace JaTour.Controllers
             var item = await _context.Trips.FindAsync(id);
             if (item != null)
             {
-                // item.Title = trip.Title ?? item.Title;
-                // item.Author = trip.Author ?? item.Author;
-                // item.ShortDescription = trip.ShortDescription ?? item.ShortDescription;
-                // item.Description = trip.Description ?? item.Description;
-                // item.StartDate = trip.StartDate;
-                // item.EndDate = trip.EndDate;
-                // item.PicCoverUrl = trip.PicCoverUrl ?? item.PicCoverUrl;
-                // item.rating = trip.rating;
-                // item.Location = trip.Location ?? item.Location;
-                // item.cost = trip.cost;
-                // item.Duration = item.Duration;
-                // item.createdAt = item.createdAt;
                 _mapper.Map(trip, item);
             }
             await _context.SaveChangesAsync();
