@@ -26,6 +26,7 @@ namespace JaTour.Extensions
             
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));
+            services.AddScoped<IPhotoAccessor, PhotoAccessor>();
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddIdentityServices(config);
 
