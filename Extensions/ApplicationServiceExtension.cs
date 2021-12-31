@@ -22,13 +22,14 @@ namespace JaTour.Extensions
             {
                 opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
             });
+
             services.AddCors();
             
             services.AddScoped<IUserAccessor, UserAccessor>();
-            services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddIdentityServices(config);
+            services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));
 
             return services;
         }

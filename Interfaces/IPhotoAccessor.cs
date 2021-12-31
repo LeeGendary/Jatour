@@ -1,8 +1,6 @@
-﻿using JaTour.Photos;
+﻿
+using JaTour.Photos;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace JaTour.Interfaces
@@ -11,7 +9,7 @@ namespace JaTour.Interfaces
     // It won't affect the database.
     public interface IPhotoAccessor
     {
-        Task<PhotoUploadResult> AddPhoto(IFormFile file);
-        Task<string> DeletePhoto(string publicId);
+        Task<PhotoUploadResult> AddPhotoAsync(IFormFile File);
+        Task<string> DeletePhotoAsync(string publicId);
     }
 }
