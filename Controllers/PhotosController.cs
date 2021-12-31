@@ -23,9 +23,9 @@ namespace JaTour.Controllers
             _photoAccessor = photoAccessor;
         }
 
-        // Get One Trip
-        [HttpPost("addPhoto")]
-        public async Task<ActionResult<Photo>> AddPhoto(IFormFile File)
+        // Post User photos
+        [HttpPost("addUserPhoto")]
+        public async Task<ActionResult<Photo>> AddUserPhoto(IFormFile File)
         {
             var user = await _context.Users.Include(p => p.Photos).FirstOrDefaultAsync(x => x.UserName == _usserAccessor.Getusername());
             if (user == null) return null;
@@ -45,6 +45,25 @@ namespace JaTour.Controllers
 
             if (result) return Ok(photo);
             return BadRequest("Problem adding photo");
+        }
+
+        // Delete Photos
+        [HttpDelete("deleteUserPhoto/{id}")]
+        public async Task<ActionResult<Photo>> DeleteUserPhoto(string id)
+        {
+            var user = await _context.Users.Include(p => p.Photos).FirstOrDefaultAsync(x => x.UserName == _usserAccessor.Getusername());
+            if (user == null) return null;
+
+            var photo = user.Photos.FirstOrDefault(x => x.Id == id);
+            if (photo == null) return null;
+            if (photo.IsMain) return BadRequest("You cannot delete your main photo");
+
+            var result = await _photoAccessor.DeletePhotoAsync(photo.Id);
+            if (result == null) return BadRequest("Problem deleting photo from cloudinary");
+
+            user.Photos.Remove(photo);
+
+            return Ok(await _context.SaveChangesAsync());
         }
     }
 }
