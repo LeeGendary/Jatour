@@ -21,13 +21,13 @@ The section list major framework/libraries used in the project.
 1. Clone the repo
 
 ```
-    git clone https://github.com/bahkali/Jatour-2.git
+    git clone https://github.com/LeeGendary/Jatour.git
 ```
 
 2. Navigate into the clientApp folder and install react packages
 
 ```
- npm install
+    npm install
 ```
 
 ### License
